@@ -20,10 +20,10 @@
   <body class="py-4">
     <div class="container">
 
-        <h1 id="today_date">{date placeholder}</h1>
+        <h1 id="today_date"></h1>
 
          <form action="diary.php" method="GET">
-          <input type="hidden" id="local_date">
+          <input type="hidden" name="local_date" id="local_date">
           <div class="row mb-3">
             <div class="col-9">
               <label for="score" class="form-label">How was your day? (0 = worst, 10 = best)</label>
