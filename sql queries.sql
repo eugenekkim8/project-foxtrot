@@ -12,6 +12,7 @@ CREATE TABLE diaries (
 	ID SERIAL PRIMARY KEY,
 	password varchar(16),
 	diary_ts timestamp,
+	local_date varchar(16),
 	score decimal(4,1),
 	comment varchar(255)
 )

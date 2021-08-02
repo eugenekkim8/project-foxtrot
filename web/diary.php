@@ -20,13 +20,10 @@
   <body class="py-4">
     <div class="container">
 
-        <?php
-
-            echo "<h1>".date("d F Y")."</h1>";
-
-        ?>
+        <h1 id="today_date">{date placeholder}</h1>
 
          <form action="diary.php" method="GET">
+          <input type="hidden" id="local_date">
           <div class="row mb-3">
             <div class="col-9">
               <label for="score" class="form-label">How was your day? (0 = worst, 10 = best)</label>
@@ -53,8 +50,8 @@
 
                     $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                    $query = "INSERT INTO diaries (password, diary_ts, score, comment) VALUES ($1, NOW(), $2, $3)";
-                    $results = pg_query_params($conn, $query, array($_GET["p"], $_GET["score"], $_GET["comment"])) or die ("Query failed:" . pg_last_error());
+                    $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_date) VALUES ($1, NOW(), $2, $3, $4)";
+                    $results = pg_query_params($conn, $query, array($_GET["p"], $_GET["score"], $_GET["comment"], $_GET["local_date"])) or die ("Query failed:" . pg_last_error());
 
                     echo('<div class="alert alert-success" role="alert">Entry submitted!</div>');
                 }
@@ -86,7 +83,7 @@
 
                 $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                $query = "SELECT score, comment, to_char(diary_ts, 'DD Mon YY') AS diary_date FROM diaries WHERE password = '" . $_GET["p"] . "' ORDER BY diary_ts DESC";
+                $query = "SELECT score, comment, local_date AS diary_date FROM diaries WHERE password = '" . $_GET["p"] . "' ORDER BY diary_ts DESC";
                 $results = pg_query($query) or die ("Query failed:" . pg_last_error());
 
                 while ($this_entry = pg_fetch_array($results)){
@@ -119,6 +116,13 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="luxon.js"></script>
+    <script>
+        var DateTime = luxon.DateTime;
+        // document.write(DateTime.now().toFormat('dd LLLL y'));
+        document.getElementById("today_date").innerHTML = DateTime.now().toFormat('dd LLLL y');
+        document.getElementById("local_date").value = DateTime.now().toFormat('dd LLL y');
+    </script>
 
   </body>
 </html>
