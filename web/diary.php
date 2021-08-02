@@ -41,9 +41,21 @@
         <?php
 
             if (isset($_GET["p"])){
-                echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary mb-3">Submit</button>';
+                // if there is a user with password = p
 
-                if (isset($_GET["score"])){
+                echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary mb-3" name="submitButton" value="set">Submit</button>';
+
+                echo '<button type="submit" class="btn btn-outline secondary" name="toggleSubscribe" value="set">Unsubscribe</button>';
+
+                // unsubscribe or subscribe button
+
+                // if user has clicked (un)suscribe button, update subscription status
+                if (isset($_GET["toggleSubscribe"])){
+                    echo 'Let\'s update!';
+                }
+
+                // if user has clicked on submit button
+                if (isset($_GET["submitButton"])){
                     $dbopts = parse_url(getenv('DATABASE_URL'));
 
                     $connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
