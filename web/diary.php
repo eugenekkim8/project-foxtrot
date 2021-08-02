@@ -64,27 +64,37 @@
                     
                     $this_user = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
 
+                    $user_active = ($this_user["is_active"] == 't') ? TRUE : FALSE;
+                    $alert_text = "";
+
+                    // switch subscription status if user has requested
+                    if (isset($_GET["toggleSubscribe"])){
+                        $query = "UPDATE users SET is_active = NOT(is_active) WHERE password = $1";
+                        $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+                        $msg_text = $user_active ? 'unsubscribed' : 'subscribed';
+                        $alert_text = '<div class="alert alert-success" role="alert">You have successfully ' . $msg_text . '!</div>';
+                        $user_active = !$user_active;
+                    }
+
                     echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary mb-3" name="submitButton" value="set">Submit</button>';
 
-                    $button_text = ($this_user["is_active"] == 't') ? 'Unsubscribe' : 'Subscribe';
+                    $button_text = $user_active ? 'Unsubscribe' : 'Subscribe';
 
-                    echo '<button type="submit" class="btn btn-outline-secondary" name="toggleSubscribe" value="set">' . $button_text . '</button>';
+                    echo '<button type="submit" class="btn btn-outline-secondary mb-3" name="toggleSubscribe" value="set">' . $button_text . '</button>';
 
-                }
+                    // if user has clicked on submit button
+                    if (isset($_GET["submitButton"])){
+                        
+                        $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_date) VALUES ($1, NOW(), $2, $3, $4)";
+                        $results = pg_query_params($conn, $query, array($_GET["p"], $_GET["score"], $_GET["comment"], $_GET["local_date"])) or die ("Query failed:" . pg_last_error());
 
-                // if user has clicked (un)suscribe button, update subscription status
-                if (isset($_GET["toggleSubscribe"])){
-                    echo 'Let\'s update!';
-                }
+                        $alert_text = '<div class="alert alert-success" role="alert">Entry submitted!</div>';
+                    }
 
-                // if user has clicked on submit button
-                if (isset($_GET["submitButton"])){
-                    
+                    if ($alert_text != ""){
+                        echo $alert_text;
+                    }
 
-                    $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_date) VALUES ($1, NOW(), $2, $3, $4)";
-                    $results = pg_query_params($conn, $query, array($_GET["p"], $_GET["score"], $_GET["comment"], $_GET["local_date"])) or die ("Query failed:" . pg_last_error());
-
-                    echo('<div class="alert alert-success" role="alert">Entry submitted!</div>');
                 }
 
             } else {
