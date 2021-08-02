@@ -41,13 +41,36 @@
         <?php
 
             if (isset($_GET["p"])){
-                // if there is a user with password = p
+                
+                // establish connection
+                $dbopts = parse_url(getenv('DATABASE_URL'));
 
-                echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary mb-3" name="submitButton" value="set">Submit</button>';
+                $connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
 
-                echo '<button type="submit" class="btn btn-outline secondary" name="toggleSubscribe" value="set">Unsubscribe</button>';
+                $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                // unsubscribe or subscribe button
+                // see if there is a user with password = p, and if so, subscription status
+
+                $query = "SELECT is_active FROM users WHERE password = $1";
+                $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+
+                // if no such user, display error message
+
+                if(pg_num_rows($results) == 0){
+
+                    echo '<div class="alert alert-danger" role="alert">No user with the specified key. Please use the link sent in your daily message.</div>';
+
+                } else { // otherwise, display submit button and (un)subscribe button
+                    
+                    $this_user = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
+
+                    echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary mb-3" name="submitButton" value="set">Submit</button>';
+
+                    $button_text = ($this_user["is_active"] == 't') ? 'Unsubscribe' : 'Subscribe';
+
+                    echo '<button type="submit" class="btn btn-outline-secondary" name="toggleSubscribe" value="set">' . $button_text . '</button>';
+
+                }
 
                 // if user has clicked (un)suscribe button, update subscription status
                 if (isset($_GET["toggleSubscribe"])){
@@ -56,11 +79,7 @@
 
                 // if user has clicked on submit button
                 if (isset($_GET["submitButton"])){
-                    $dbopts = parse_url(getenv('DATABASE_URL'));
-
-                    $connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
-
-                    $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
+                    
 
                     $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_date) VALUES ($1, NOW(), $2, $3, $4)";
                     $results = pg_query_params($conn, $query, array($_GET["p"], $_GET["score"], $_GET["comment"], $_GET["local_date"])) or die ("Query failed:" . pg_last_error());
@@ -69,7 +88,7 @@
                 }
 
             } else {
-                echo '<div class="alert alert-danger" role="alert">No user specified. Please use the link sent in the daily message.</div>';
+                echo '<div class="alert alert-danger" role="alert">No user specified. Please use the link sent in your daily message.</div>';
             }
 
 
