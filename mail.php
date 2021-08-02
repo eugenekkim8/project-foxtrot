@@ -35,9 +35,7 @@ test?
 
     //Content
     $mail->isHTML(true);
-    $mail->Subject = 'Check-in';
-    $mail->Body    = 'Good morning! Here is a <a href = "google.com">link</a>.';
-    $mail->AltBody = 'Good morning! Here is a link: google.com';
+    $mail->Subject = 'Your daily check-in';
 
     //Connect to DB
     $dbopts = parse_url(getenv('DATABASE_URL'));
@@ -47,7 +45,7 @@ test?
 	$conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
 	//Pull current user list
-	$query = "SELECT phone_num, carrier FROM users WHERE is_active AND text_consent";
+	$query = "SELECT phone_num, carrier, password FROM users WHERE is_active AND text_consent";
 	$results = pg_query($query) or die ("Query failed:" . pg_last_error());
 
 	while ($this_user = pg_fetch_array($results)){
@@ -56,8 +54,11 @@ test?
 		$phone_num = $this_user['phone_num'];
 		$carrier_domain = $carriers[$this_user['carrier']];
 		$address = $phone_num . "@" . $carrier_domain;
+		$password = $this_user['password'];
+
 		$mail->addAddress($address);
-		echo $address;
+		$mail->Body    = 'Jot down how you\'re feeling today <a href = "https://project-foxtrot.herokuapp.com/diary.php?p=' . $password . '">here</a>.';
+    	$mail->AltBody = 'Jot down how you\'re feeling today: https://project-foxtrot.herokuapp.com/diary.php?p=' . $password;
 
 		try {
 		    $mail->send();

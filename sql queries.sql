@@ -11,7 +11,7 @@ CREATE TABLE users (
 CREATE TABLE diaries (
 	ID SERIAL PRIMARY KEY,
 	password varchar(16),
-	diary_ts DATETIME,
+	diary_ts timestamp,
 	score decimal(4,1),
 	comment varchar(255)
 )
