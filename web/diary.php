@@ -76,7 +76,7 @@
                         $user_active = !$user_active;
                     }
 
-                    echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary" name="submitButton" value="set">Submit</button>';
+                    echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary" name="submitButton" value="set">Submit</button> ';
 
                     $button_text = $user_active ? 'Unsubscribe' : 'Subscribe';
 
