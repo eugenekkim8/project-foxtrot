@@ -48,9 +48,15 @@
           <div class = "form-floating mb-3">
             <select class="form-select" name="carrier" id="carrier" aria-label="Carrier select" required>
               <option selected disabled value="">Select...</option>
-              <option>AT&T</option>
-              <option>T-Mobile</option>
               <option>Verizon</option>
+              <option>T-Mobile</option>
+              <option>AT&T</option>
+              <option>Boost</option>
+              <option>Cricket</option>
+              <option>Google Fi</option>
+              <option>Mint</option>
+              <option>Ting</option>
+              <option>Visible</option>
             </select>
             <label for="carrier">Your carrier</label>
             <div class="invalid-feedback">Please select a carrier.</div>
