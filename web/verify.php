@@ -12,7 +12,7 @@
   </head>
   <body class="py-4">
     <div class="container">
-         <h1>foxtrot: a web-based mental health diary</h1>
+         <h1>foxtrot: a web-based mental health tracker</h1>
          
          <?php
 
@@ -41,7 +41,7 @@
     	?>
 
         <footer class="pt-5 my-5 text-muted border-top">
-          &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & GitHub
+          &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
         </footer>
     </div>
 

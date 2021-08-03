@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>foxtrot | a web-based mental health diary</title>
+    <title>foxtrot | a web-based mental health tracker</title>
   </head>
   <script>
 
@@ -161,7 +161,7 @@
 
         </table>
         <footer class="pt-5 my-5 text-muted border-top">
-          &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & GitHub
+          &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
         </footer>
     </div>
 

@@ -8,11 +8,11 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>foxtrot | a web-based mental health diary</title>
+    <title>foxtrot | a web-based mental health tracker</title>
   </head>
   <body class="py-4">
     <div class="container">
-         <h1>foxtrot: a web-based mental health diary</h1>
+         <h1>foxtrot: a web-based mental health tracker</h1>
          <ul><li>subscribe for daily mental health check-ins: leave whenever </li>
          <li>no identifying information except your phone number</li></ul>
 
@@ -128,7 +128,7 @@
           <input type="submit" class="btn btn-primary" value="Submit">
         </form>
         <footer class="pt-5 my-5 text-muted border-top">
-          &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & GitHub
+          &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
         </footer>
     </div>
 
