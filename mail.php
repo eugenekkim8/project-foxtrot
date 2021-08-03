@@ -51,7 +51,7 @@ test?
 	$conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
 	//Pull current user list
-	$query = "SELECT phone_num, carrier, password FROM users WHERE is_active AND text_consent";
+	$query = "SELECT phone_num, carrier, password FROM users WHERE is_active AND text_consent AND verified_num";
 	$results = pg_query($query) or die ("Query failed:" . pg_last_error());
 
 	while ($this_user = pg_fetch_array($results)){
