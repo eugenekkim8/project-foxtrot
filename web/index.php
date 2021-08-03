@@ -14,7 +14,7 @@
     <div class="container">
          <h1>foxtrot: a web-based mental health tracker</h1>
          <ul><li>subscribe for daily mental health check-ins: leave whenever </li>
-         <li>no identifying information except your phone number</li></ul>
+         <li>all entries are private: <a href="about.html" class="link-primary">learn more</a></li></ul>
 
          <?php
 
