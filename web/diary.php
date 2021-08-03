@@ -81,7 +81,7 @@
                         $query = "UPDATE users SET is_active = NOT(is_active) WHERE password = $1";
                         $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
                         $msg_text = $user_active ? 'unsubscribed' : 'subscribed';
-                        $alert_text = '<div class="alert alert-success mt-3" role="alert">You have successfully ' . $msg_text . '!</div>';
+                        $alert_text = 'You have successfully ' . $msg_text . '!';
                         $user_active = !$user_active;
                     }
 
@@ -97,11 +97,11 @@
                         $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_date) VALUES ($1, NOW(), $2, $3, $4)";
                         $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
 
-                        $alert_text = '<div class="alert alert-success mt-3" role="alert">Entry submitted!</div>';
+                        $alert_text = 'Entry submitted!';
                     }
 
                     if ($alert_text != ""){
-                        echo $alert_text;
+                        echo '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">' . $alert_text . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
                     }
 
                 }
