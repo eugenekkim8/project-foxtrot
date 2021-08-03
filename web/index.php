@@ -44,11 +44,11 @@
                     $query = "INSERT INTO users (phone_num, carrier, password, text_consent, is_active, verified_num, subscribe_ts) VALUES ($1, $2, $3, 'T', 'F', T', NOW())";
                     $results = pg_query_params($conn, $query, array($_POST["phoneNum"], $_POST["carrier"], $pass)) or die ("Query failed:" . pg_last_error());
 
-                    // send verification email
+                    // send verification text
 
                     require '../vendor/autoload.php';
 
-                    use PHPMailer\PHPMailer\PHPMailer;
+                    /* use PHPMailer\PHPMailer\PHPMailer;
                     use PHPMailer\PHPMailer\SMTP;
                     use PHPMailer\PHPMailer\Exception;
 
@@ -99,7 +99,7 @@
                         echo '<div class="alert alert-success" role="alert"><h4 class="alert-heading">Thanks for subscribing!</h4><p class="mb-0">You will receive a text message shortly to verify your identity.</div>';;
                     } catch (Exception $e) {
                         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                    }
+                    } */
 
                 } else {
                     echo '<div class="alert alert-danger" role="alert">Account already exists for this number.</div>';
