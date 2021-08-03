@@ -48,7 +48,7 @@
 
                     // insert row
 
-                    $query = "INSERT INTO users (phone_num, carrier, password, text_consent, is_active, verified_num, subscribe_ts) VALUES ($1, $2, $3, 'T', 'F', T', NOW())";
+                    $query = "INSERT INTO users (phone_num, carrier, password, text_consent, is_active, verified_num, subscribe_ts) VALUES ($1, $2, $3, 'T', 'F', 'T', NOW())";
                     $results = pg_query_params($conn, $query, array($_POST["phoneNum"], $_POST["carrier"], $pass)) or die ("Query failed:" . pg_last_error());
 
                     // send verification text
