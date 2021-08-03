@@ -11,18 +11,7 @@ test?
 	use PHPMailer\PHPMailer\SMTP;
 	use PHPMailer\PHPMailer\Exception;
 
-	//List of carriers
-	$carriers = [
-		"T-Mobile" => "tmomail.net",
-		"AT&T" => "txt.att.net",
-		"Verizon" => "vtext.com",
-		"Visible" => "vtext.com",
-		"Mint" => "tmomail.net",
-		"Boost" => "myboostmobile.com",
-		"Google Fi" => "msg.fi.google.com",
-		"Cricket" => "mms.cricketwireless.net",
-		"Ting" => "message.ting.com"
-	];
+	include 'carriers.php'; // contains $carriers, an array of carriers
 
 	//Create an instance; passing `true` enables exceptions
 	$mail = new PHPMailer(true);

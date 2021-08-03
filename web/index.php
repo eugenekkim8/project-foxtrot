@@ -19,6 +19,7 @@
          <?php
 
             require '../vendor/autoload.php';
+            include '../carriers.php'; // contains $carriers, an array of carriers
 
             use PHPMailer\PHPMailer\PHPMailer;
             use PHPMailer\PHPMailer\SMTP;
@@ -52,19 +53,6 @@
                     $results = pg_query_params($conn, $query, array($_POST["phoneNum"], $_POST["carrier"], $pass)) or die ("Query failed:" . pg_last_error());
 
                     // send verification text
-
-                    //List of carriers
-                    $carriers = [
-                        "T-Mobile" => "tmomail.net",
-                        "AT&T" => "txt.att.net",
-                        "Verizon" => "vtext.com",
-                        "Visible" => "vtext.com",
-                        "Mint" => "tmomail.net",
-                        "Boost" => "myboostmobile.com",
-                        "Google Fi" => "msg.fi.google.com",
-                        "Cricket" => "mms.cricketwireless.net",
-                        "Ting" => "message.ting.com"
-                    ];
 
                     //Create an instance; passing `true` enables exceptions
                     $mail = new PHPMailer(true);
