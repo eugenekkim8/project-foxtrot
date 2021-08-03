@@ -48,11 +48,11 @@
 
                     require '../vendor/autoload.php';
 
-                    /* use PHPMailer\PHPMailer\PHPMailer;
+                    use PHPMailer\PHPMailer\PHPMailer;
                     use PHPMailer\PHPMailer\SMTP;
                     use PHPMailer\PHPMailer\Exception;
 
-                    //List of carriers
+                    /*//List of carriers
                     $carriers = [
                         "T-Mobile" => "tmomail.net",
                         "AT&T" => "txt.att.net",
