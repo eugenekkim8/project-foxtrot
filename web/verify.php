@@ -16,7 +16,7 @@
          
          <?php
 
-    		if(isset($_GET["p"])){
+    		if (isset($_GET["p"])){
     			$dbopts = parse_url(getenv('DATABASE_URL'));
 
     			$connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
@@ -32,7 +32,7 @@
 
                 } else { 
 
-                    echo '<div class="alert alert-success" role="alert"><h4 class="alert-heading">Thank you!</h4><p class="mb-0">Your account has been activated. Expect a check-in text within 24 hours.</div>'
+                    echo '<div class="alert alert-success" role="alert"><h4 class="alert-heading">Thank you!</h4><p class="mb-0">Your account has been activated. Expect a check-in text within 24 hours.</div>';
 
                 }
 
@@ -46,28 +46,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-    <script>
-    	(function () {
-		  'use strict'
-
-		  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-		  var forms = document.querySelectorAll('.needs-validation')
-
-		  // Loop over them and prevent submission
-		  Array.prototype.slice.call(forms)
-		    .forEach(function (form) {
-		      form.addEventListener('submit', function (event) {
-		        if (!form.checkValidity()) {
-		          event.preventDefault()
-		          event.stopPropagation()
-		        }
-
-		        form.classList.add('was-validated')
-		      }, false)
-		    })
-		})()
-    </script>
 
   </body>
 </html>
