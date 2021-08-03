@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>foxtrot | a web-based mental health diary</title>
+    <title>foxtrot | a web-based mental health tracker</title>
   </head>
   <script>
 
@@ -20,13 +20,19 @@
   <body class="py-4">
     <div class="container">
 
+        <h1 id="today_date"></h1>
+
         <?php
 
-            echo "<h1>".date("d F Y")."</h1>";
+            if (isset($_GET["p"])){
+                echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST">';
+            } else{
+                echo '<form>';
+            }
 
         ?>
 
-         <form action="diary.php" method="GET">
+          <input type="hidden" name="local_date" id="local_date">
           <div class="row mb-3">
             <div class="col-9">
               <label for="score" class="form-label">How was your day? (0 = worst, 10 = best)</label>
@@ -44,29 +50,70 @@
         <?php
 
             if (isset($_GET["p"])){
-                echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary mb-3">Submit</button>';
+                
+                // establish connection
+                $dbopts = parse_url(getenv('DATABASE_URL'));
 
-                if (isset($_GET["score"])){
-                    $dbopts = parse_url(getenv('DATABASE_URL'));
+                $connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
 
-                    $connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
+                $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                    $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
+                // see if there is a user with password = p, and if so, subscription status
 
-                    $query = "INSERT INTO diaries (password, diary_ts, score, comment) VALUES ($1, NOW(), $2, $3)";
-                    $results = pg_query_params($conn, $query, array($_GET["p"], $_GET["score"], $_GET["comment"])) or die ("Query failed:" . pg_last_error());
+                $query = "SELECT is_active FROM users WHERE password = $1";
+                $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
-                    echo('<div class="alert alert-success" role="alert">Entry submitted!</div>');
+                // if no such user, display error message
+
+                if (pg_num_rows($results) == 0){
+
+                    echo '<div class="alert alert-danger" role="alert">No user with the specified key. Please use the link sent in your daily message.</div>';
+
+                } else { // otherwise, display submit button and (un)subscribe button
+                    
+                    $this_user = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
+
+                    $user_active = ($this_user["is_active"] == 't') ? TRUE : FALSE;
+                    $alert_text = "";
+
+                    // switch subscription status if user has requested
+                    if (isset($_POST["toggleSubscribe"])){
+                        $query = "UPDATE users SET is_active = NOT(is_active) WHERE password = $1";
+                        $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+                        $msg_text = $user_active ? 'unsubscribed' : 'subscribed';
+                        $alert_text = 'You have successfully ' . $msg_text . '!';
+                        $user_active = !$user_active;
+                    }
+
+                    echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary" name="submitButton" value="set">Submit</button> ';
+
+                    $button_text = $user_active ? 'Unsubscribe' : 'Subscribe';
+
+                    echo '<button type="submit" class="btn btn-outline-secondary" name="toggleSubscribe" value="set">' . $button_text . '</button>';
+
+                    // if user has clicked on submit button
+                    if (isset($_POST["submitButton"])){
+                        
+                        $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_date) VALUES ($1, NOW(), $2, $3, $4)";
+                        $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
+
+                        $alert_text = 'Entry submitted!';
+                    }
+
+                    if ($alert_text != ""){
+                        echo '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">' . $alert_text . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                    }
+
                 }
 
             } else {
-                echo '<div class="alert alert-danger" role="alert">No user specified. Please use the link sent in the daily message.</div>';
+                echo '<div class="alert alert-danger" role="alert">No user specified. Please use the link sent in your daily message.</div>';
             }
 
+        echo ('</form>');
 
         ?>
-          
-        </form>
+         
         <hr>
         <h2>Past entries:</h2>
         <table class="table">
@@ -86,8 +133,8 @@
 
                 $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                $query = "SELECT score, comment, to_char(diary_ts, 'DD Mon YY') AS diary_date FROM diaries WHERE password = '" . $_GET["p"] . "' ORDER BY diary_ts DESC";
-                $results = pg_query($query) or die ("Query failed:" . pg_last_error());
+                $query = "SELECT score, comment, local_date AS diary_date FROM diaries WHERE password = $1 ORDER BY diary_ts DESC";
+                $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
                 while ($this_entry = pg_fetch_array($results)){
 
@@ -114,11 +161,17 @@
 
         </table>
         <footer class="pt-5 my-5 text-muted border-top">
-          &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & GitHub
+          &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
         </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="luxon.js"></script>
+    <script>
+        var DateTime = luxon.DateTime;
+        document.getElementById("today_date").innerHTML = DateTime.now().toFormat('dd LLLL y');
+        document.getElementById("local_date").value = DateTime.now().toFormat('dd LLL y');
+    </script>
 
   </body>
 </html>
