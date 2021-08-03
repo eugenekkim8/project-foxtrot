@@ -35,14 +35,71 @@
 
                 if (pg_num_rows($results) == 0){ // proceed with account creation
                     
-                    // send validation link
+                    // generate password
 
                     $pass = generateRandomString(); 
 
-                    $query = "INSERT INTO users (phone_num, carrier, password, text_consent, is_active, subscribe_ts) VALUES ($1, $2, $3, 'T', 'T', NOW())";
+                    // insert row
+
+                    $query = "INSERT INTO users (phone_num, carrier, password, text_consent, is_active, verified_num, subscribe_ts) VALUES ($1, $2, $3, 'T', 'F', T', NOW())";
                     $results = pg_query_params($conn, $query, array($_POST["phoneNum"], $_POST["carrier"], $pass)) or die ("Query failed:" . pg_last_error());
 
-                    echo '<div class="alert alert-success" role="alert"><h4 class="alert-heading">Thanks for subscribing!</h4><p class="mb-0">You should receive your first text within 24 hours.</div>';
+                    // send verification email
+
+                    require 'vendor/autoload.php';
+
+                    use PHPMailer\PHPMailer\PHPMailer;
+                    use PHPMailer\PHPMailer\SMTP;
+                    use PHPMailer\PHPMailer\Exception;
+
+                    //List of carriers
+                    $carriers = [
+                        "T-Mobile" => "tmomail.net",
+                        "AT&T" => "txt.att.net",
+                        "Verizon" => "vtext.com",
+                        "Visible" => "vtext.com",
+                        "Mint" => "tmomail.net",
+                        "Boost" => "myboostmobile.com",
+                        "Google Fi" => "msg.fi.google.com",
+                        "Cricket" => "mms.cricketwireless.net",
+                        "Ting" => "message.ting.com"
+                    ];
+
+                    //Create an instance; passing `true` enables exceptions
+                    $mail = new PHPMailer(true);
+
+                    //Server settings
+                    $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                    $mail->isSMTP();                                            //Send using SMTP
+                    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                    $mail->Username   = getenv('GMAIL_ADDR');                     //SMTP username
+                    $mail->Password   = getenv('GMAIL_PASS');                               //SMTP password
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                    $mail->Port       = 465;                                    //TCP port to connect to
+
+                    $mail->setFrom('admin@test.com', 'Foxtrot');
+
+                    //Content
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Welcome!';
+
+                    $phone_num = $_POST["phoneNum"];
+                    $carrier_domain = $carriers[$_POST['carrier']];
+                    $address = $phone_num . "@" . $carrier_domain;
+                    $password = $pass;
+
+                    $mail->addAddress($address);
+
+                    $mail->Body    = 'Verify your account <a href = "https://project-foxtrot.herokuapp.com/verify.php?p=' . $password . '">here</a>.';
+                    $mail->AltBody = 'Verify your account here: https://project-foxtrot.herokuapp.com/verify.php?p=' . $password;
+
+                    try {
+                        $mail->send();
+                        echo '<div class="alert alert-success" role="alert"><h4 class="alert-heading">Thanks for subscribing!</h4><p class="mb-0">You will receive a text message shortly to verify your identity.</div>';;
+                    } catch (Exception $e) {
+                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                    }
 
                 } else {
                     echo '<div class="alert alert-danger" role="alert">Account already exists for this number.</div>';

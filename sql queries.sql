@@ -5,6 +5,7 @@ CREATE TABLE users (
 	password varchar(16) UNIQUE,
 	text_consent bool, 
 	is_active bool,
+	verified_num bool,
 	subscribe_ts timestamp
 )
 
