@@ -28,6 +28,10 @@
 
 				$conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
+        // is there an already existing account?
+
+        // if not, send validation link
+
 				$pass = generateRandomString(); 
 
 				$query = "INSERT INTO users (phone_num, carrier, password, text_consent, is_active, subscribe_ts) VALUES (" . $_POST["phoneNum"] . ", '" . $_POST["carrier"] . "', '" . $pass . "', 'T', 'T', NOW())";

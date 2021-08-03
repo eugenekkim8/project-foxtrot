@@ -22,7 +22,16 @@
 
         <h1 id="today_date"></h1>
 
-         <form action="diary.php" method="GET">
+        <?php
+
+            if (isset($_GET["p"])){
+                echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST">';
+            } else{
+                echo '<form>';
+            }
+
+        ?>
+
           <input type="hidden" name="local_date" id="local_date">
           <div class="row mb-3">
             <div class="col-9">
@@ -68,7 +77,7 @@
                     $alert_text = "";
 
                     // switch subscription status if user has requested
-                    if (isset($_GET["toggleSubscribe"])){
+                    if (isset($_POST["toggleSubscribe"])){
                         $query = "UPDATE users SET is_active = NOT(is_active) WHERE password = $1";
                         $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
                         $msg_text = $user_active ? 'unsubscribed' : 'subscribed';
@@ -83,10 +92,10 @@
                     echo '<button type="submit" class="btn btn-outline-secondary" name="toggleSubscribe" value="set">' . $button_text . '</button>';
 
                     // if user has clicked on submit button
-                    if (isset($_GET["submitButton"])){
+                    if (isset($_POST["submitButton"])){
                         
                         $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_date) VALUES ($1, NOW(), $2, $3, $4)";
-                        $results = pg_query_params($conn, $query, array($_GET["p"], $_GET["score"], $_GET["comment"], $_GET["local_date"])) or die ("Query failed:" . pg_last_error());
+                        $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
 
                         $alert_text = '<div class="alert alert-success mt-3" role="alert">Entry submitted!</div>';
                     }
@@ -101,10 +110,10 @@
                 echo '<div class="alert alert-danger" role="alert">No user specified. Please use the link sent in your daily message.</div>';
             }
 
+        echo ('</form>');
 
         ?>
-          
-        </form>
+         
         <hr>
         <h2>Past entries:</h2>
         <table class="table">
