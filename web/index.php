@@ -31,7 +31,7 @@
                 // is there an already existing account?
 
                 $query = "SELECT * FROM users WHERE phone_num = $1";
-                $results = pg_query_params($conn, $query, array($_POST["phoneNum"])) or die ("Query failed:" . pg_last_error());
+                $results = pg_query_params($conn, $query, array(intval($_POST["phoneNum"]))) or die ("Query failed:" . pg_last_error());
 
                 if (pg_num_rows($results) == 0){ // proceed with account creation
                     
