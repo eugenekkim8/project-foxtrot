@@ -65,7 +65,7 @@
 
                 // if no such user, display error message
 
-                if(pg_num_rows($results) == 0){
+                if (pg_num_rows($results) == 0){
 
                     echo '<div class="alert alert-danger" role="alert">No user with the specified key. Please use the link sent in your daily message.</div>';
 
