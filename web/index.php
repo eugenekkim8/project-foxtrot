@@ -17,30 +17,40 @@
          <li>no identifying information except your phone number</li></ul>
 
          <?php
-			function generateRandomString($length = 10){
-    			return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    		function generateRandomString($length = 10){
+        		return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+        	}
+
+    		if(isset($_POST["phoneNum"])){
+    			$dbopts = parse_url(getenv('DATABASE_URL'));
+
+    			$connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
+
+    			$conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
+
+                // is there an already existing account?
+
+                $query = "SELECT * FROM users WHERE phone_num = $1";
+                $results = pg_query_params($conn, $query, array($_POST["phoneNum"])) or die ("Query failed:" . pg_last_error());
+
+                if (pg_num_rows($results) == 0){ // proceed with account creation
+                    
+                    // send validation link
+
+                    $pass = generateRandomString(); 
+
+                    $query = "INSERT INTO users (phone_num, carrier, password, text_consent, is_active, subscribe_ts) VALUES ($1, $2, $3, 'T', 'T', NOW())";
+                    $results = pg_query_params($conn, $query, array($_POST["phoneNum"], $_POST["carrier"], $pass)) or die ("Query failed:" . pg_last_error());
+
+                    echo '<div class="alert alert-success" role="alert"><h4 class="alert-heading">Thanks for subscribing!</h4><p class="mb-0">You should receive your first text within 24 hours.</div>';
+
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">Account already exists for this number.</div>';
+                }
+            
     		}
 
-			if(isset($_POST["phoneNum"])){
-				$dbopts = parse_url(getenv('DATABASE_URL'));
-
-				$connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
-
-				$conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
-
-        // is there an already existing account?
-
-        // if not, send validation link
-
-				$pass = generateRandomString(); 
-
-				$query = "INSERT INTO users (phone_num, carrier, password, text_consent, is_active, subscribe_ts) VALUES (" . $_POST["phoneNum"] . ", '" . $_POST["carrier"] . "', '" . $pass . "', 'T', 'T', NOW())";
-				$results = pg_query($query) or die ("Query failed:" . pg_last_error());
-
-				echo('<div class="alert alert-success" role="alert"><h4 class="alert-heading">Thanks for subscribing!</h4><p class="mb-0">You should receive your first text within 24 hours.</div>');
-			}
-
-		?>
+    	?>
 
          <form method="POST" class="needs-validation" action="index.php" novalidate>
           <div class="form-floating mb-3">

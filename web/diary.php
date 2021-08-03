@@ -133,8 +133,8 @@
 
                 $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                $query = "SELECT score, comment, local_date AS diary_date FROM diaries WHERE password = '" . $_GET["p"] . "' ORDER BY diary_ts DESC";
-                $results = pg_query($query) or die ("Query failed:" . pg_last_error());
+                $query = "SELECT score, comment, local_date AS diary_date FROM diaries WHERE password = $1 ORDER BY diary_ts DESC";
+                $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
                 while ($this_entry = pg_fetch_array($results)){
 
