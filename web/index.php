@@ -17,6 +17,13 @@
          <li>no identifying information except your phone number</li></ul>
 
          <?php
+
+            require '../vendor/autoload.php';
+
+            use PHPMailer\PHPMailer\PHPMailer;
+            use PHPMailer\PHPMailer\SMTP;
+            use PHPMailer\PHPMailer\Exception;
+
     		function generateRandomString($length = 10){
         		return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
         	}
@@ -46,13 +53,7 @@
 
                     // send verification text
 
-                    require '../vendor/autoload.php';
-
-                    use PHPMailer\PHPMailer\PHPMailer;
-                    use PHPMailer\PHPMailer\SMTP;
-                    use PHPMailer\PHPMailer\Exception;
-
-                    /*//List of carriers
+                    //List of carriers
                     $carriers = [
                         "T-Mobile" => "tmomail.net",
                         "AT&T" => "txt.att.net",
@@ -99,7 +100,7 @@
                         echo '<div class="alert alert-success" role="alert"><h4 class="alert-heading">Thanks for subscribing!</h4><p class="mb-0">You will receive a text message shortly to verify your identity.</div>';;
                     } catch (Exception $e) {
                         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                    } */
+                    }
 
                 } else {
                     echo '<div class="alert alert-danger" role="alert">Account already exists for this number.</div>';
