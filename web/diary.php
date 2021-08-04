@@ -33,8 +33,10 @@
         $alert_text = 'Entry submitted!';
     }
 
-    header("Location: " . $_SERVER['REQUEST_URI'] . "&alert_text=" . $alert_text); 
-    exit();
+    if ($_POST){
+        header("Location: " . $_SERVER['REQUEST_URI'] . "&alert_text=" . $alert_text); 
+        exit();
+    }
 
 ?>
 
