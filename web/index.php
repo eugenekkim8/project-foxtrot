@@ -25,16 +25,16 @@
             use PHPMailer\PHPMailer\SMTP;
             use PHPMailer\PHPMailer\Exception;
 
-    		function generateRandomString($length = 10){
-        		return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
-        	}
+            function generateRandomString($length = 10){
+                return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+            }
 
-    		if(isset($_POST["phoneNum"])){
-    			$dbopts = parse_url(getenv('DATABASE_URL'));
+            if(isset($_POST["phoneNum"])){
+              $dbopts = parse_url(getenv('DATABASE_URL'));
 
-    			$connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
+              $connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
 
-    			$conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
+              $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
                 // is there an already existing account?
 
@@ -92,10 +92,10 @@
                 } else {
                     echo '<div class="alert alert-danger" role="alert">Account already exists for this number.</div>';
                 }
-            
-    		}
+                
+            }
 
-    	?>
+      ?>
 
          <form method="POST" class="needs-validation" action="index.php" novalidate>
           <div class="form-floating mb-3">
@@ -135,25 +135,25 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <script>
-    	(function () {
-		  'use strict'
+      (function () {
+      'use strict'
 
-		  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-		  var forms = document.querySelectorAll('.needs-validation')
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
 
-		  // Loop over them and prevent submission
-		  Array.prototype.slice.call(forms)
-		    .forEach(function (form) {
-		      form.addEventListener('submit', function (event) {
-		        if (!form.checkValidity()) {
-		          event.preventDefault()
-		          event.stopPropagation()
-		        }
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
 
-		        form.classList.add('was-validated')
-		      }, false)
-		    })
-		})()
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
     </script>
 
   </body>
