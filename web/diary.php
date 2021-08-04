@@ -20,7 +20,7 @@
         $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
         
         $this_user = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
-        $msg_text = ($this_user["is_active"] == 't') ? 'unsubscribed' : 'subscribed';
+        $msg_text = ($this_user["is_active"] == 't') ? 'subscribed' : 'unsubscribed';
         $alert_text = 'You have successfully ' . $msg_text . '!';
     }
 
