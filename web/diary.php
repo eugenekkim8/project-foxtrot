@@ -87,7 +87,7 @@
           </div>
           <div class = "mb-3">
             <label for="comments" class="form-label">Tell me more:</label>
-            <textarea class="form-control" id="comments" name="comment" placeholder="Today was a wonderful/terrible day." rows="3"></textarea>
+            <textarea class="form-control" id="comments" name="comment" placeholder="Today was a wonderful/terrible day." maxlength="255" rows="3"></textarea>
           </div>
 
         <?php
