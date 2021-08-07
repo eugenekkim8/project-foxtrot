@@ -50,6 +50,8 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css">
 
     <title>foxtrot | a web-based mental health tracker</title>
   </head>
@@ -133,7 +135,7 @@
          
         <hr>
         <h2>Past entries:</h2>
-        <table class="table">
+        <table class="table" id="entries">
           <thead>
             <tr>
               <th class="col-2" scope="col">Date</th>
@@ -184,10 +186,22 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="luxon.js"></script>
+    <script src="jquery-3.6.0.slim.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
     <script>
         var DateTime = luxon.DateTime;
         document.getElementById("today_date").innerHTML = DateTime.now().toFormat('dd LLLL y');
         document.getElementById("local_date").value = DateTime.now().toFormat('dd LLL y');
+
+        $(document).ready(function() {
+            $('#entries').DataTable({
+              "order": [[ 0, "desc" ]],
+              lengthChange: false,
+              searching: false
+            });
+        } );
+
     </script>
 
   </body>
