@@ -196,9 +196,9 @@
 
         $(document).ready(function() {
             $('#entries').DataTable({
-              "order": [[ 0, "desc" ]],
               lengthChange: false,
-              searching: false
+              searching: false,
+              ordering: false
             });
         } );
 
