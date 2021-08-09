@@ -180,7 +180,7 @@
 
         </table>
         <footer class="pt-5 my-5 text-muted border-top">
-          &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
+         Test! &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
         </footer>
     </div>
 
