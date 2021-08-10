@@ -52,8 +52,8 @@ test?
 		$password = $this_user['password'];
 
 		$mail->addAddress($address);
-		$mail->Body    = 'Jot down how you\'re feeling today <a href = "https://project-foxtrot.herokuapp.com/diary.php?p=' . $password . '">here</a>.';
-    	$mail->AltBody = 'Jot down how you\'re feeling today: https://project-foxtrot.herokuapp.com/diary.php?p=' . $password;
+		$mail->Body    = 'Jot down how you\'re feeling today or unsubscribe <a href = "https://project-foxtrot.herokuapp.com/diary.php?p=' . $password . '">here</a>.';
+    	$mail->AltBody = 'Jot down how you\'re feeling today or unsubscribe: https://project-foxtrot.herokuapp.com/diary.php?p=' . $password;
 
 		try {
 		    $mail->send();

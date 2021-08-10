@@ -27,7 +27,7 @@ SET local_ts = TO_DATE(local_date, 'DD Mon YYYY');
 
 INSERT INTO diaries (local_ts) VALUES (to_timestamp('10/14/1983, 22:40:10', 'MM/DD/YYYY, HH24:MI:SS'))
 
-//run teh above. change hidden date field, change the insert query, change display query. see if it works; if so,  run query below
+//run the above. change hidden date field, change the insert query, change display query. see if it works; if so, push and run query below
 
 ALTER TABLE diaries
 DROP COLUMN local_date
