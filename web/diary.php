@@ -27,7 +27,7 @@
     // if user has clicked on submit button
     if (isset($_POST["submitButton"])){
         
-        $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_date) VALUES ($1, NOW(), $2, $3, $4)";
+        $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_ts) VALUES ($1, NOW(), $2, $3, $4)";
         $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
 
         $alert_text = 'Entry submitted!';
@@ -152,7 +152,7 @@
 
                 $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                $query = "SELECT score, comment, local_date AS diary_date FROM diaries WHERE password = $1 ORDER BY diary_ts DESC";
+                $query = "SELECT score, comment, to_char(local_ts, 'DD Mon YYYY') AS diary_date FROM diaries WHERE password = $1 ORDER BY diary_ts DESC";
                 $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
                 while ($this_entry = pg_fetch_array($results)){
@@ -192,7 +192,7 @@
     <script>
         var DateTime = luxon.DateTime;
         document.getElementById("today_date").innerHTML = DateTime.now().toFormat('dd LLLL y');
-        document.getElementById("local_date").value = DateTime.now().toFormat('dd LLL y');
+        document.getElementById("local_date").value = DateTime.now().toFormat('MM/dd/yyyy, TT');
 
         $(document).ready(function() {
             $('#entries').DataTable({
