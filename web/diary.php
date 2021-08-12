@@ -201,20 +201,6 @@
             </div>
           </div>
         </div>
-         <?php
-                if (isset($_GET["p"])){
-                    $query = "SELECT AVG(score), DATE(local_ts) AS local_date FROM diaries WHERE password=$1 GROUP BY DATE(local_ts) ORDER BY DATE(local_ts) ASC";
-                    $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
-
-                    $data = array();
-                    while ($row = pg_fetch_array($results)) {
-                        $data[] = $row;
-                    }
-
-                    echo json_encode($data);
-
-                }
-            ?>
         <footer class="pt-5 my-5 text-muted border-top">
           &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
         </footer>
@@ -251,11 +237,19 @@
                     $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
                     $data = array();
-
+                    while ($row = pg_fetch_array($results)) {
+                        $data[] = $row;
+                    }
                 }
             ?>
+
+            var data = <?php echo json_encode($data); ?>;
+
+            var entry_dates = [];
+            var scores = [];
             
-            var name = [
+            
+            /*var name = [
             '01 Aug 2021',
             '02 Aug 2021',
             '03 Aug 2021',
@@ -265,16 +259,16 @@
             '07 Aug 2021',
             '08 Aug 2021',
             '09 Aug 2021'];
-            var marks = [7.5, 5.5, 6.5, 7, 7.5, 5.5, 6, 5, 7];
+            var scores = [7.5, 5.5, 6.5, 7, 7.5, 5.5, 6, 5, 7];*/
             var sma = [null, null, null, null, 6.8, 6.4, 6.5, 6.2, 6.2];
 
-            //for (var i in data) {
-            //    name.push(data[i].student_name);
-            //    marks.push(data[i].marks);
-            //}
+            for (var i in data) {
+                entry_dates.push(data[i].local_date);
+                scores.push(data[i].daily_avg_score);
+            }
 
             var chartdata = {
-                labels: name,
+                labels: entry_dates,
                 datasets: [
                     {
                         label: 'Daily Score',
@@ -282,7 +276,7 @@
                         borderColor: '#46d5f1',
                         hoverBackgroundColor: '#CCCCCC',
                         hoverBorderColor: '#666666',
-                        data: marks
+                        data: scores
                     },
                     {
                         label: '5d Moving Average',
