@@ -52,6 +52,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
     <title>foxtrot | a web-based mental health tracker</title>
   </head>
@@ -134,55 +135,149 @@
         ?>
          
         <hr>
-        <h2>Past entries:</h2>
-        <table class="table" id="entries">
-          <thead>
-            <tr>
-              <th class="col-2" scope="col">Date</th>
-              <th class="col-2" scope="col">Score</th>
-              <th class="col-8" scope="col">Comments</th>
-            </tr>
-          </thead>
+        <div class="row">
+          <div class="col-6"><h2>Past entries:</h2></div>
+          <div class="col-6">
+            <ul class="nav nav-pills justify-content-end" role="tablist">
+              <li class="nav-item">
+                <button class="nav-link active" id="pills-table-tab" data-bs-toggle="pill" data-bs-target="#pills-table" type="button" role="tab" aria-controls="pills-table" aria-selected="true"><i class="bi-table"></i></button>
+              </li>
+              <li class="nav-item">
+                <button class="nav-link" id="pills-graph-tab" data-bs-toggle="pill" data-bs-target="#pills-graph" type="button" role="tab" aria-controls="pills-graph" aria-selected="false"><i class="bi-graph-up"></i></button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">
+            <table class="table" id="entries">
+              <thead>
+                <tr>
+                  <th class="col-2" scope="col">Date</th>
+                  <th class="col-2" scope="col">Score</th>
+                  <th class="col-8" scope="col">Comments</th>
+                </tr>
+              </thead>
 
-        <?php
-            if (isset($_GET["p"])){
-                $dbopts = parse_url(getenv('DATABASE_URL'));
+            <?php
+                if (isset($_GET["p"])){
+                    $dbopts = parse_url(getenv('DATABASE_URL'));
 
-                $connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
+                    $connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
 
-                $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
+                    $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                $query = "SELECT score, comment, to_char(local_ts, 'DD Mon YYYY') AS diary_date FROM diaries WHERE password = $1 ORDER BY diary_ts DESC";
-                $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+                    $query = "SELECT score, comment, to_char(local_ts, 'DD Mon YYYY') AS diary_date FROM diaries WHERE password = $1 ORDER BY diary_ts DESC";
+                    $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
-                while ($this_entry = pg_fetch_array($results)){
+                    while ($this_entry = pg_fetch_array($results)){
 
-                    $this_score = $this_entry["score"];
-                    $color = "";
+                        $this_score = $this_entry["score"];
+                        $color = "";
 
-                    if ($this_score  <= 3.5){
-                        $color = "table-danger";
-                    } elseif ($this_score <= 6.5){
-                        $color = "table-warning";
-                    } else {
-                        $color = "table-success";
+                        if ($this_score  <= 3.5){
+                            $color = "table-danger";
+                        } elseif ($this_score <= 6.5){
+                            $color = "table-warning";
+                        } else {
+                            $color = "table-success";
+                        }
+
+                        echo '<tr>';
+                        echo '<th scope="row">' . $this_entry["diary_date"] . '</th>';
+                        echo '<td class="' . $color . '">' . $this_entry["score"] . '</td>';
+                        echo '<td>' . $this_entry["comment"] . '</td>';
+                        echo '</tr>';
+
                     }
-
-                    echo '<tr>';
-                    echo '<th scope="row">' . $this_entry["diary_date"] . '</th>';
-                    echo '<td class="' . $color . '">' . $this_entry["score"] . '</td>';
-                    echo '<td>' . $this_entry["comment"] . '</td>';
-                    echo '</tr>';
-
                 }
-            }
-        ?>
+            ?>
 
-        </table>
+            </table>
+          </div>
+          <div class="tab-pane fade" id="pills-graph" role="tabpanel" aria-labelledby="pills-graph-tab">
+            <div id="chart-container table-responsive">
+              <canvas id="graphCanvas" style="min-height:250px" class="table"></canvas>
+            </div>
+          </div>
+        </div>
         <footer class="pt-5 my-5 text-muted border-top">
           &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
         </footer>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function () {
+            showGraph();
+        });
+
+        function showGraph() {
+            
+            var name = [
+            '01 Aug 2021',
+            '02 Aug 2021',
+            '03 Aug 2021',
+            '04 Aug 2021',
+            '05 Aug 2021',
+            '06 Aug 2021',
+            '07 Aug 2021',
+            '08 Aug 2021',
+            '09 Aug 2021'];
+            var marks = [7.5, 5.5, 6.5, 7, 7.5, 5.5, 6, 5, 7];
+            var sma = [null, null, null, null, 6.8, 6.4, 6.5, 6.2, 6.2];
+
+            //for (var i in data) {
+            //    name.push(data[i].student_name);
+            //    marks.push(data[i].marks);
+            //}
+
+            var chartdata = {
+                labels: name,
+                datasets: [
+                    {
+                        label: 'Daily Score',
+                        backgroundColor: '#49e2ff',
+                        borderColor: '#46d5f1',
+                        hoverBackgroundColor: '#CCCCCC',
+                        hoverBorderColor: '#666666',
+                        data: marks
+                    },
+                    {
+                        label: '5d Moving Average',
+                        backgroundColor: '#2a7fb8',
+                        borderColor: '#246d9e',
+                        //backgroundColor: Utils.CHART_COLORS.blue,
+                        //borderColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
+                        hoverBackgroundColor: '#CCCCCC',
+                        hoverBorderColor: '#666666',
+                        data: sma
+                    }
+                ]
+            };
+
+            var graphTarget = document.getElementById("graphCanvas");
+
+            var lineGraph = new Chart(graphTarget, {
+              type: 'line',
+              data: chartdata,
+              options: {
+                scales: {
+                  y: {
+                    type: 'linear',
+                    grace: '10%'
+                  }
+                },
+                interaction: {
+                  mode: 'index'
+                },
+                responsive: true,
+                maintainAspectRatio: false
+              }
+            });
+        }
+
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="luxon.js"></script>
