@@ -207,7 +207,24 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="luxon.js"></script>
+    <script src="jquery-3.6.0.slim.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
     <script>
+        var DateTime = luxon.DateTime;
+        document.getElementById("today_date").innerHTML = DateTime.now().toFormat('dd LLLL y');
+        document.getElementById("local_date").value = DateTime.now().toFormat('MM/dd/yyyy, TT');
+
+        $(document).ready(function() {
+            $('#entries').DataTable({
+              lengthChange: false,
+              searching: false,
+              ordering: false
+            });
+        } );
+
         $(document).ready(function () {
             showGraph();
         });
@@ -276,26 +293,6 @@
               }
             });
         }
-
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="luxon.js"></script>
-    <script src="jquery-3.6.0.slim.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-        var DateTime = luxon.DateTime;
-        document.getElementById("today_date").innerHTML = DateTime.now().toFormat('dd LLLL y');
-        document.getElementById("local_date").value = DateTime.now().toFormat('MM/dd/yyyy, TT');
-
-        $(document).ready(function() {
-            $('#entries').DataTable({
-              lengthChange: false,
-              searching: false,
-              ordering: false
-            });
-        } );
 
     </script>
 
