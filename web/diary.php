@@ -207,7 +207,7 @@
                     $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
                     $data = array();
-                    foreach ($result as $row) {
+                    while ($row = pg_fetch_array($results)) {
                         $data[] = $row;
                     }
 
