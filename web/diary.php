@@ -201,6 +201,20 @@
             </div>
           </div>
         </div>
+         <?php
+                if (isset($_GET["p"])){
+                    $query = "SELECT AVG(score), DATE(local_ts) AS local_date FROM diaries WHERE password=$1 GROUP BY DATE(local_ts) ORDER BY DATE(local_ts) ASC";
+                    $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+
+                    $data = array();
+                    foreach ($result as $row) {
+                        $data[] = $row;
+                    }
+
+                    echo json_encode($data);
+
+                }
+            ?>
         <footer class="pt-5 my-5 text-muted border-top">
           &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
         </footer>
@@ -230,6 +244,16 @@
         });
 
         function showGraph() {
+
+            <?php
+                if (isset($_GET["p"])){
+                    $query = "SELECT AVG(score) AS daily_avg_score, DATE(local_ts) AS local_date FROM diaries WHERE password=$1 GROUP BY DATE(local_ts) ORDER BY DATE(local_ts) ASC";
+                    $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+
+                    $data = array();
+
+                }
+            ?>
             
             var name = [
             '01 Aug 2021',
