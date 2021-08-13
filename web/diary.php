@@ -247,19 +247,6 @@
 
             var entry_dates = [];
             var scores = [];
-            
-            
-            /*var name = [
-            '01 Aug 2021',
-            '02 Aug 2021',
-            '03 Aug 2021',
-            '04 Aug 2021',
-            '05 Aug 2021',
-            '06 Aug 2021',
-            '07 Aug 2021',
-            '08 Aug 2021',
-            '09 Aug 2021'];
-            var scores = [7.5, 5.5, 6.5, 7, 7.5, 5.5, 6, 5, 7];*/
             var sma = [null, null, null, null, 6.8, 6.4, 6.5, 6.2, 6.2];
 
             for (var i in data) {
@@ -298,6 +285,13 @@
               data: chartdata,
               options: {
                 scales: {
+                  x: {
+                    type: 'time',
+                    time: {
+                      unit: 'day',
+                      tooltipFormat: 'DD'
+                    }
+                  },
                   y: {
                     type: 'linear',
                     grace: '10%'
