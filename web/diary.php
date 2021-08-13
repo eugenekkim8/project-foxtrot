@@ -288,7 +288,6 @@
                   x: {
                     type: 'time',
                     time: {
-                      unit: 'day',
                       tooltipFormat: 'DD'
                     }
                   },
