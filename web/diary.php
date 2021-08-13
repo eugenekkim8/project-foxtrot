@@ -288,6 +288,7 @@
                   x: [{
                     type: 'time',
                     time: {
+                      parser: 'YYYY-MM-DD',
                       unit: 'day',
                       tooltipFormat: 'DD'
                     }
