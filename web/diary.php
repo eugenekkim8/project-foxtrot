@@ -285,16 +285,17 @@
               data: chartdata,
               options: {
                 scales: {
-                  x: {
+                  x: [{
                     type: 'time',
                     time: {
+                      unit: 'day',
                       tooltipFormat: 'DD'
                     }
-                  },
-                  y: {
+                  }],
+                  y: [{
                     type: 'linear',
                     grace: '10%'
-                  }
+                  }]
                 },
                 interaction: {
                   mode: 'index'
