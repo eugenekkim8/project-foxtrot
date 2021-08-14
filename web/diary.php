@@ -209,6 +209,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="luxon.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
     <script src="jquery-3.6.0.slim.min.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
@@ -285,18 +286,17 @@
               data: chartdata,
               options: {
                 scales: {
-                  x: [{
+                  x: {
                     type: 'time',
                     time: {
-                      parser: 'YYYY-MM-DD',
                       unit: 'day',
                       tooltipFormat: 'DD'
                     }
-                  }],
-                  y: [{
+                  },
+                  y: {
                     type: 'linear',
                     grace: '10%'
-                  }]
+                  }
                 },
                 interaction: {
                   mode: 'index'
