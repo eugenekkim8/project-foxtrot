@@ -230,6 +230,18 @@
             showGraph();
         });
 
+        function moving_average(array, window){
+            var result = [];
+            for(var i = 0; i < array.length - window; i++){
+                var subset_sum = 0;
+                for(var j = i; j < i + window; j++){
+                    subset_sum += array[j];
+                }
+                result.push(subset_sum / window); 
+            }
+            return result;
+        }
+
         function showGraph() {
 
             <?php
@@ -248,7 +260,7 @@
 
             var entry_dates = [];
             var scores = [];
-            var sma = [null, null, null, null, 6.8, 6.4, 6.5, 6.2, 6.2];
+            var sma = moving_average(scores, 5);
 
             for (var i in data) {
                 entry_dates.push(data[i].local_date);
