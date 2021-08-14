@@ -263,12 +263,13 @@
 
             var entry_dates = [];
             var scores = [];
-            var sma = padded_moving_average(scores, 5);
 
             for (var i in data) {
                 entry_dates.push(data[i].local_date);
                 scores.push(data[i].daily_avg_score);
             }
+
+            var sma = padded_moving_average(scores, 5);
 
             var chartdata = {
                 labels: entry_dates,
