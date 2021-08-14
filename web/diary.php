@@ -266,7 +266,7 @@
 
             for (var i in data) {
                 entry_dates.push(data[i].local_date);
-                scores.push(data[i].daily_avg_score);
+                scores.push(parseFloat(data[i].daily_avg_score));
             }
 
             var sma = padded_moving_average(scores, 5);
