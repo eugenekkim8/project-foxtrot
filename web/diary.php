@@ -257,6 +257,7 @@
                         $data[] = $row;
                     }
                 }
+                echo json_encode($data);
             ?>
 
             var data = <?php echo json_encode($data); ?>;
@@ -286,8 +287,6 @@
                         label: '5d Moving Average',
                         backgroundColor: '#2a7fb8',
                         borderColor: '#246d9e',
-                        //backgroundColor: Utils.CHART_COLORS.blue,
-                        //borderColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
                         hoverBackgroundColor: '#CCCCCC',
                         hoverBorderColor: '#666666',
                         data: sma
