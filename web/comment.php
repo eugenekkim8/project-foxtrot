@@ -19,7 +19,12 @@
     }
 
     if ($_POST){
-        header("Location: " . $_SERVER['REQUEST_URI'] . "&alert_text=" . $alert_text); 
+        if ($_GET){
+                header("Location: " . $_SERVER['REQUEST_URI'] . "&alert_text=" . $alert_text); 
+            } else{
+                header("Location: " . $_SERVER['REQUEST_URI'] . "?alert_text=" . $alert_text); 
+            }
+        
         exit();
     }
 
@@ -80,9 +85,9 @@
             <?php
 
                 if (isset($_GET["p"])){
-                    echo '&middot; <a href="comment.php?p=' . $_GET["p"] . '" class="link-secondary">Leave a comment</a>';
+                    echo '&middot; Leave a <a href="comment.php?p=' . $_GET["p"] . '" class="link-secondary">comment</a>';
                 } else {
-                    echo '&middot; <a href="comment.php" class="link-secondary">Leave a comment</a>';
+                    echo '&middot; Leave a <a href="comment.php" class="link-secondary">comment</a>';
                 }  
 
             ?>
