@@ -203,6 +203,15 @@
         </div>
         <footer class="pt-5 my-5 text-muted border-top">
           &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
+          <?php
+
+                if (isset($_GET["p"])){
+                    echo '&middot; <a href="comment.php?p=' . $_GET["p"] . '" class="link-secondary">Comments</a>?';
+                } else {
+                    echo '&middot; <a href="comment.php" class="link-secondary">Comments</a>?';
+                }  
+
+          ?>
         </footer>
     </div>
 

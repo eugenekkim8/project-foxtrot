@@ -50,7 +50,6 @@
         <?php
 
             if (isset($_GET["p"])){
-                echo '<a href="diary.php?p=' . $_GET["p"] . '">Return to entries</a>';
                 echo '<form action="comment.php?p=' . $_GET["p"] . '" method="POST">';
             } else{
                 echo '<form action="comment.php" method="POST">';
@@ -85,9 +84,9 @@
             <?php
 
                 if (isset($_GET["p"])){
-                    echo '&middot; Leave a <a href="comment.php?p=' . $_GET["p"] . '" class="link-secondary">comment</a>';
+                    echo '&middot; <a href="comment.php?p=' . $_GET["p"] . '" class="link-secondary">Comments</a>?';
                 } else {
-                    echo '&middot; Leave a <a href="comment.php" class="link-secondary">comment</a>';
+                    echo '&middot; <a href="comment.php" class="link-secondary">Comments</a>?';
                 }  
 
             ?>
