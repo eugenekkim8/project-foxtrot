@@ -257,7 +257,6 @@
                         $data[] = $row;
                     }
                 }
-                echo json_encode($data);
             ?>
 
             var data = <?php echo json_encode($data); ?>;
@@ -323,6 +322,6 @@
         }
 
     </script>
-
+<?php echo json_encode($data); ?>
   </body>
 </html>
