@@ -15,7 +15,7 @@
         $query = "INSERT INTO comments (comment, comment_ts) VALUES ($1, NOW())";
         $results = pg_query_params($conn, $query, array($_POST["comment"])) or die ("Query failed:" . pg_last_error());
 
-        $alert_text = 'Entry submitted!';
+        $alert_text = 'Comment submitted!';
     }
 
     if ($_POST){
