@@ -230,14 +230,17 @@
             showGraph();
         });
 
-        function moving_average(array, window){
+        function padded_moving_average(array, win){
             var result = [];
-            for(var i = 0; i < array.length - window; i++){
+            for(var k = 0; k < win; k++){
+                result.push(null);
+            }
+            for(var i = 0; i < array.length - win; i++){
                 var subset_sum = 0;
-                for(var j = i; j < i + window; j++){
+                for(var j = i; j < i + win; j++){
                     subset_sum += array[j];
                 }
-                result.push(subset_sum / window); 
+                result.push(subset_sum / win); 
             }
             return result;
         }
@@ -260,7 +263,7 @@
 
             var entry_dates = [];
             var scores = [];
-            var sma = moving_average(scores, 5);
+            var sma = padded_moving_average(scores, 5);
 
             for (var i in data) {
                 entry_dates.push(data[i].local_date);
