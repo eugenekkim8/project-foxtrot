@@ -232,7 +232,7 @@
 
         function padded_moving_average(array, win){
             var result = [];
-            for(var k = 0; k < win; k++){
+            for(var k = 0; k < win - 1; k++){
                 result.push(null);
             }
             for(var i = 0; i < array.length - win; i++){
@@ -322,6 +322,5 @@
         }
 
     </script>
-<?php echo json_encode($data); ?>
   </body>
 </html>
