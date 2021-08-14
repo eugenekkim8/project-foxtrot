@@ -235,7 +235,7 @@
             for(var k = 0; k < win - 1; k++){
                 result.push(null);
             }
-            for(var i = 0; i < array.length - win; i++){
+            for(var i = 0; i < array.length - win + 1; i++){
                 var subset_sum = 0;
                 for(var j = i; j < i + win; j++){
                     subset_sum += array[j];
