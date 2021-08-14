@@ -12,7 +12,7 @@
     // if user has clicked on submit button
     if (isset($_POST["submitButton"])){
         
-        $query = "INSERT INTO comments (comment, local_ts) VALUES ($1, NOW())";
+        $query = "INSERT INTO comments (comment, comment_ts) VALUES ($1, NOW())";
         $results = pg_query_params($conn, $query, array($_POST["comment"])) or die ("Query failed:" . pg_last_error());
 
         $alert_text = 'Entry submitted!';
@@ -55,7 +55,7 @@
 
         <div class = "mb-3">
             <label for="comments" class="form-label">Leave a comment, suggestion, or message:</label>
-            <textarea class="form-control" id="comments" name="comment" placeholder="How can we make this better?" maxlength="255" rows="3"></textarea>
+            <textarea class="form-control" id="comments" name="comment" placeholder="How can this app be more useful?" maxlength="255" rows="3"></textarea>
         </div>
         <button type="submit" class="btn btn-primary" name="submitButton" value="set">Submit</button>
 
@@ -77,6 +77,15 @@
      
         <footer class="pt-5 my-5 text-muted border-top">
           &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
+            <?php
+
+                if (isset($_GET["p"])){
+                    echo '&middot; <a href="comment.php?p=' . $_GET["p"] . '" class="link-secondary">Leave a comment</a>';
+                } else {
+                    echo '&middot; <a href="comment.php" class="link-secondary">Leave a comment</a>';
+                }  
+
+            ?>
         </footer>
     </div>
 
