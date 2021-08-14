@@ -1,8 +1,6 @@
 <?php
-    /*// post-redirect-get mechanism to avoid double entries
-    // form can be submitted only if p is valid, so no need to redo verification
-
-    // establish connection
+    // post-redirect-get mechanism to avoid double entries
+    
     $dbopts = parse_url(getenv('DATABASE_URL'));
 
     $connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
@@ -11,24 +9,11 @@
 
     $alert_text = "";
 
-    // switch subscription status if user has requested
-    if (isset($_POST["toggleSubscribe"])){
-        $query = "UPDATE users SET is_active = NOT(is_active) WHERE password = $1";
-        $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
-
-        $query = "SELECT is_active FROM users WHERE password = $1";
-        $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
-        
-        $this_user = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
-        $msg_text = ($this_user["is_active"] == 't') ? 'subscribed' : 'unsubscribed';
-        $alert_text = 'You have successfully ' . $msg_text . '!';
-    }
-
     // if user has clicked on submit button
     if (isset($_POST["submitButton"])){
         
-        $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_ts) VALUES ($1, NOW(), $2, $3, $4)";
-        $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
+        $query = "INSERT INTO comments (comment, local_ts) VALUES ($1, NOW())";
+        $results = pg_query_params($conn, $query, array($_POST["comment"])) or die ("Query failed:" . pg_last_error());
 
         $alert_text = 'Entry submitted!';
     }
@@ -36,7 +21,7 @@
     if ($_POST){
         header("Location: " . $_SERVER['REQUEST_URI'] . "&alert_text=" . $alert_text); 
         exit();
-    }*/
+    }
 
 ?>
 
@@ -60,6 +45,7 @@
         <?php
 
             if (isset($_GET["p"])){
+                echo '<a href="diary.php?p=' . $_GET["p"] . '">Return to entries</a>';
                 echo '<form action="comment.php?p=' . $_GET["p"] . '" method="POST">';
             } else{
                 echo '<form action="comment.php" method="POST">';
@@ -69,16 +55,19 @@
 
         <div class = "mb-3">
             <label for="comments" class="form-label">Leave a comment, suggestion, or message:</label>
-            <textarea class="form-control" id="comments" name="comment" placeholder="What an excellent app." maxlength="255" rows="3"></textarea>
+            <textarea class="form-control" id="comments" name="comment" placeholder="How can we make this better?" maxlength="255" rows="3"></textarea>
         </div>
         <button type="submit" class="btn btn-primary" name="submitButton" value="set">Submit</button>
 
         <?php
-                   
+
+            if (isset($_GET["p"])){
+                echo '<a href="diary.php?p=' . $_GET["p"] . '" class="btn btn-outline-secondary">Return to my page</a>';
+            }      
+
             if (isset($_GET["alert_text"])){
                 echo '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">' . $_GET["alert_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
             }
-
                
             echo ('</form>');
 
