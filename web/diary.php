@@ -258,7 +258,7 @@
 
             <?php
                 if (isset($_GET["p"])){
-                    $query = "SELECT AVG(score) AS daily_avg_score, DATE(local_ts) AS local_date FROM diaries WHERE password=$1 GROUP BY DATE(local_ts) ORDER BY DATE(local_ts) DESC LIMIT 50";
+                    $query = "SELECT * FROM (SELECT AVG(score) AS daily_avg_score, DATE(local_ts) AS local_date FROM diaries WHERE password=$1 GROUP BY DATE(local_ts) ORDER BY DATE(local_ts) DESC LIMIT 50) t ORDER BY t.local_date ASC";
                     $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
                     $data = array();
