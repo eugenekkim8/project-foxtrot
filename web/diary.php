@@ -135,9 +135,9 @@
         ?>
          
         <hr>
-        <div class="row">
-          <div class="col-6"><h2>Past entries:</h2></div>
-          <div class="col-6">
+        <div class="row mb-3">
+          <div class="col-5"><h2>Dashboard</h2></div>
+          <div class="col-7">
             <ul class="nav nav-pills justify-content-end" role="tablist">
               <li class="nav-item">
                 <button class="nav-link active" id="pills-table-tab" data-bs-toggle="pill" data-bs-target="#pills-table" type="button" role="tab" aria-controls="pills-table" aria-selected="true"><i class="bi-table"></i></button>
