@@ -96,7 +96,7 @@
 
         # insert
         $alert_text = "Heart sent!";
-        $alert_type = 'alert_success';
+        $alert_type = 'alert-success';
 
         # redirect
         header("Location: " . $_SERVER['REQUEST_URI'] . "&heart_text=" . $alert_text . "&heart_alert_type=" . $alert_type); 
@@ -243,7 +243,7 @@
 
         <div class="tab-content" id="pills-tabContent">
             <?php
-                if(isset($_GET["share_text"])){ // if they just attempted to share, activate social tab
+                if(isset($_GET["share_text"]) or isset($_GET["share_text"])){ // if they just attempted to share or heart, activate social tab
                     echo('<div class="tab-pane fade" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">');
                 } else{ // show default table tab
                     echo('<div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">');
@@ -307,9 +307,14 @@
 <!-- Social -->
 
           <?php
-                if(isset($_GET["share_text"])){ // if they just attempted to share, activate social tab
-                    echo('<div class="tab-pane fade show active" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">
-                            <div class="accordion mb-3" id="shareScores">
+                if(isset($_GET["share_text"]) or isset($_GET["heart_text"])){ // if they just attempted to share or heart, activate social tab
+                    echo('<div class="tab-pane fade show active" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">');
+                } else{ // show default table tab, with collapsed share accordion
+                    echo('<div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">');
+                }
+
+                if(isset($_GET["share_text"]) or isset($_GET["heart_text"])){ // if they just attempted to share, activate sharing accordion
+                    echo('<div class="accordion mb-3" id="shareScores">
                                   <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -318,9 +323,8 @@
                                     </h2>
                                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#shareScores">
                                       <div class="accordion-body">');
-                } else{ // show default table tab, with collapsed share accordion
-                    echo('<div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">
-                            <div class="accordion mb-3" id="shareScores">
+                } else{ // show collapsed share accordion
+                    echo('<div class="accordion mb-3" id="shareScores">
                               <div class="accordion-item">
                                 <h2 class="accordion-header" id="headingOne">
                                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -331,7 +335,7 @@
                                   <div class="accordion-body">');
                 }
 
-                if (isset($_GET["p"])){
+                if (isset($_GET["p"])){ // prep form for sharing
                     echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST" class="row g-3 needs-validation" novalidate>';
                 } else{
                     echo '<form class="row g-3 needs-validation" novalidate>';
