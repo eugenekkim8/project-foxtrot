@@ -372,8 +372,10 @@
 
                                 }
 
+                                echo '</div>';
+                                
                                 if (isset($_GET["share_text"])){ // show alert if share was attempted
-                                    echo '</div><div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                                    echo '<div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
                                 }
 
                             } else {
