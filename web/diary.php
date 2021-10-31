@@ -93,8 +93,8 @@
     if(isset($_POST["diaryId"])){ //if user wants to heart someone's post
 
         # insert
-        $query = "INSERT INTO reactions (sender_id, diary_id) VALUES ($1, $2, NOW())";
-        $results = pg_query_params($conn, $query, array($_POST["sender_id"], $recipient_id)) or die ("Query failed:" . pg_last_error());
+        $query = "INSERT INTO reactions (sender_id, diary_id, seen, reaction_ts VALUES ($1, $2, 'F', NOW())";
+        $results = pg_query_params($conn, $query, array($_POST["sender_id"], $_POST["diary_id"])) or die ("Query failed:" . pg_last_error());
         $alert_text = "Heart sent!";
         $alert_type = 'alert-success';
 
@@ -419,7 +419,22 @@
                 <?php
 
                     if (isset($_GET["p"])){
-                        echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST">';
+                        $query = "SELECT id FROM users WHERE password = $1";
+                        $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+
+                        // if no such user, disable submit
+
+                        if (pg_num_rows($results) == 0){
+                            echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST">';
+                        } else { // otherwise, enable submit and store ID
+                            echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST">';
+                            $this_user = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
+                            $sender_id = $this_user["id"];
+
+                            echo '<input type="hidden" name="sender_id" value="' . $sender_id . '">';
+
+                        }
+
                     } else{
                         echo '<form>';
                     }
