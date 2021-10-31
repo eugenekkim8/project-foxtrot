@@ -401,18 +401,62 @@
                   </div>
                 </div>
               </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="headingThree">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    Notifications &nbsp;<span class="badge bg-secondary">New</span>
-                  </button>
-                </h2>
-                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#shareScores">
-                  <div class="accordion-body">
-                    Coming soon!
-                  </div>
-                </div>
-              </div>
+
+            <?php
+
+                echo '<div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Notifications';
+
+                $query = "SELECT u2.phone_num, to_char(d.local_ts, 'Mon DD') AS diary_date, d.score AS score FROM reactions r 
+                            LEFT JOIN diaries d on d.id = r.diary_id
+                            LEFT JOIN users u on u.password = d.password
+                            LEFT JOIN users u2 on u2.id = r.sender_id
+                            WHERE u.password = $1 AND r.seen = 'F'
+                            LIMIT 10";
+                $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+
+                // if no new notifications
+
+                if (pg_num_rows($results) == 0){
+
+                    echo '</button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#shareScores">
+                              <div class="accordion-body">
+                                No new notifications!';
+
+                } else { // otherwise, display new badge and notification alerts, then mark notifications as seen 
+                
+                    echo '&nbsp;<span class="badge bg-secondary">New</span>
+                              </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#shareScores">
+                              <div class="accordion-body">';
+
+                    while ($this_entry = pg_fetch_array($results)){
+
+                        $format_num = '('.substr($this_entry["phone_num"], 0, 3).') '.substr($this_entry["phone_num"], 3, 3).'-'.substr($this_entry["phone_num"],6);
+
+                        echo '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert"><strong>' . $format_num . '</strong> sends a <i class="bi-heart-fill"></i> for your ' . $this_entry["diary_date"] . ' entry (score ' . $this_entry["score"] . ') <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+
+                    }
+
+                    $query = "UPDATE reactions 
+                                LEFT JOIN diaries d on d.id = r.diary_id
+                                LEFT JOIN users u on u.password = d.password
+                                SET seen = 'T' 
+                                WHERE u.password = $1"
+
+                    $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+
+                }
+
+                echo '</div></div></div>';
+
+            ?>
+
             </div>
             <div class="row">              
               <div class="col-md">
