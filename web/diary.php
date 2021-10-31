@@ -49,7 +49,7 @@
 
         if (pg_num_rows($results) == 0){ // no user with that phone number
 
-            $alert_text = 'No user with that phone number!';
+            $alert_text = 'No user with that phone number! <a href="" data-bs-toggle="modal" data-bs-target="#invite">Send an email invitation?</a>';
             $alert_type = 'alert-danger';
 
         } else { // otherwise, see if recipient is a user
@@ -570,6 +570,58 @@
           ?>
         </footer>
     </div>
+
+    <div class="modal fade" id="invite" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Send an email invitation!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Invite your friend to foxtrot so you can share scores.
+                <?php
+                    if (isset($_GET["p"])){ 
+                        echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST" class="mt-3 needs-validation" novalidate>';
+                    } else{
+                        echo '<form class="mt-3 needs-validation" novalidate>';
+                    }
+                ?>  
+                  <div class="row mb-3"> <div class="col-md-4"> Email address:</div><div class="col-md-8"><input type="email" class="form-control" placeholder="name@example.com" required> <div class="invalid-feedback">Please provide a valid email address.</div> </div></div>
+                  <div class="row"> <div class="col-md-4"> Your name:</div><div class="col-md-8"><input type="text" class="form-control" describedby="nameHelp" required><div id="nameHelp" class="form-text">We won't save this.</div> </div></div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" name="email" class="btn btn-primary">Send</button></form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <div class="modal fade" id="invite" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Send an email invite!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <?php
+                if (isset($_GET["p"])){ 
+                    echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST" class="needs-validation" novalidate>';
+                } else{
+                    echo '<form class="needs-validation" novalidate>';
+                }
+            ?>
+              Email address: <input type="text">
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
