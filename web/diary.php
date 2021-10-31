@@ -55,11 +55,12 @@
         } else { // otherwise, see if recipient is a user
 
             $recipient = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
-            $recipient_id = $this_user["id"];
+            $recipient_id = $recipient["id"];
 
             if($recipient_id == $_POST["sender_id"]){
                 $alert_text = 'Can\'t share a score with yourself!!';
                 $alert_type = 'alert-danger';
+
             } else { //see if scores are already shared
 
                 $query = "SELECT id FROM shares where sender_id = $1 AND recipient_id = $2";
