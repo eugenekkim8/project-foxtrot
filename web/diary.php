@@ -145,6 +145,9 @@
               <li class="nav-item">
                 <button class="nav-link" id="pills-graph-tab" data-bs-toggle="pill" data-bs-target="#pills-graph" type="button" role="tab" aria-controls="pills-graph" aria-selected="false"><i class="bi-graph-up"></i></button>
               </li>
+              <li class="nav-item">
+                <button class="nav-link" id="pills-social-tab" data-bs-toggle="pill" data-bs-target="#pills-social, #pills-social-head" type="button" role="tab" aria-controls="pills-social" aria-selected="false"><i class="bi-people-fill"></i></button> 
+              </li>
             </ul>
           </div>
         </div>
@@ -200,6 +203,62 @@
               <canvas id="graphCanvas" style="min-height:250px" class="table"></canvas>
             </div>
           </div>
+          <div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">
+            <div class="accordion mb-3" id="shareScores">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Share my scores
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#shareScores">
+                  <div class="accordion-body">
+                    <form method="POST" class="row g-3 needs-validation" action="" novalidate>
+                      <div class="col-md-6">
+                        <input type="tel" placeholder="Recipient's phone number" class="form-control" name="phoneNum" id="phoneNum" pattern="^\d{10}$" required>
+                        <div class="invalid-feedback">Please provide a valid 10-digit phone number (e.g., 1234567890).</div>
+                      </div>
+                      <div class="col-md-6">
+                        <input type="submit" class="btn btn-primary" value="Submit">
+                      </div>
+                    </form>
+                    <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                      No user with that phone number! <a href="" data-bs-toggle="modal" data-bs-target="#invite">Send an email invitation?</a>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Unshare my scores
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#shareScores">
+                  <div class="accordion-body">
+                    Coming soon!
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">              
+              <div class="col-md">
+                <table class="table" id="community">
+                  <thead>
+                    <tr>
+                      <th class="col-3" scope="col">Date</th>
+                      <th class="col-4" scope="col">User</th>
+                      <th class="col-3" scope="col">Score</th>
+                      <th class="col-2" scope="col">Tools</th>
+                    </tr>
+                  </thead>
+                  <tr><th scope="row">06 Aug 2021</th><td>(914) 320-6643</td><td class="table-warning">5.5</td><td><button class="btn btn-primary"><i class="bi-heart-fill"></i></button></td></tr>
+                  <th scope="row">06 Aug 2021</th><td>(914) 320-6643</td><td class="table-warning">5.5</td><td><button class="btn btn-primary"><i class="bi-heart-fill"></i></button></td></tr>
+                </table>
+              </div>
+            </div> 
+          </div>  
         </div>
         <footer class="pt-5 my-5 text-muted border-top">
           &copy; 2021 Eugene K. Kim &middot; Hosted on Heroku & <a href="https://github.com/eugenekkim8/project-foxtrot" class="link-primary">GitHub</a>
