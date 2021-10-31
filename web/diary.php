@@ -281,9 +281,27 @@
           </div>
           <?php
                 if(isset($_GET["share_text"])){ // if they just attempted to share, activate social tab
-                    echo('<div class="tab-pane fade show active" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">');
-                } else{ // show default table tab
-                    echo('<div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">');
+                    echo('<div class="tab-pane fade show active" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">
+                            <div class="accordion mb-3" id="shareScores">
+                                  <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Share my scores
+                                      </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#shareScores">
+                                      <div class="accordion-body">');
+                } else{ // show default table tab, with collapsed share accordion
+                    echo('<div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">
+                            <div class="accordion mb-3" id="shareScores">
+                              <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    Share my scores
+                                  </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#shareScores">
+                                  <div class="accordion-body">');
                 }
           ?>
 
