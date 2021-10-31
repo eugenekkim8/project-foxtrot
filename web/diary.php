@@ -47,7 +47,7 @@
         $query = "SELECT id FROM users where phone_num = $1";
         $results = pg_query_params($conn, $query, array($_POST["phoneNum"])) or die ("Query failed:" . pg_last_error());
 
-        if (pg_num_rows($results) == 0){
+        if (pg_num_rows($results) == 0){ // no user with that phone number
 
             $alert_text = 'No user with that phone number!';
             $alert_type = 'alert-danger';
@@ -57,8 +57,8 @@
             $recipient = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
             $recipient_id = $recipient["id"];
 
-            if($recipient_id == $_POST["sender_id"]){
-                $alert_text = 'Can\'t share a score with yourself!!';
+            if($recipient_id == $_POST["sender_id"]){ // prohibit sharing with self
+                $alert_text = 'Can\'t share a score with yourself!';
                 $alert_type = 'alert-danger';
 
             } else { //see if scores are already shared
@@ -376,8 +376,51 @@
                       <th class="col-2" scope="col">Tools</th>
                     </tr>
                   </thead>
-                  <tr><th scope="row">06 Aug 2021</th><td>(914) 320-6643</td><td class="table-warning">5.5</td><td><button class="btn btn-primary"><i class="bi-heart-fill"></i></button></td></tr>
-                  <th scope="row">06 Aug 2021</th><td>(914) 320-6643</td><td class="table-warning">5.5</td><td><button class="btn btn-primary"><i class="bi-heart-fill"></i></button></td></tr>
+
+                  <?php
+                    if (isset($_GET["p"])){
+                        $dbopts = parse_url(getenv('DATABASE_URL'));
+
+                        $connect_str = "host = " . $dbopts["host"] . " port = " . $dbopts["port"] . " dbname = " . ltrim($dbopts["path"], "/") . " user = " . $dbopts["user"] . " password = " . $dbopts["pass"];
+
+                        $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
+
+                        $query = "SELECT d.id, u.phone_num, d.local_ts, d.score FROM diaries d 
+                                    LEFT JOIN users u ON u.password = d.password 
+                                    LEFT JOIN shares s ON u.id = s.sender_id 
+                                    LEFT JOIN users u2 ON u2.id = s.recipient_id
+                                    WHERE u2.password = $1
+                                    ORDER BY d.local_ts DESC
+                                    LIMIT 10";
+                        $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+
+                        while ($this_entry = pg_fetch_array($results)){
+
+                            $this_score = $this_entry["score"];
+                            $color = "";
+
+                            $format_num = '('.substr($this_entry["phone_num"], 0, 3).') '.substr($this_entry["phone_num"], 3, 3).'-'.substr($this_entry["phone_num"],6);
+
+
+                            if ($this_score  <= 3.5){
+                                $color = "table-danger";
+                            } elseif ($this_score <= 6.5){
+                                $color = "table-warning";
+                            } else {
+                                $color = "table-success";
+                            }
+
+                            echo '<tr>';
+                            echo '<th scope="row">' . $this_entry["diary_date"] . '</th>';
+                            echo '<td>' . $format_num . '</td>';
+                            echo '<td class="' . $color . '">' . $this_entry["score"] . '</td>';
+                            echo '<td><button class="btn btn-primary"><i class="bi-heart-fill"></i></button></td>';
+                            echo '</tr>';
+
+                        }
+                    }
+                ?>                
+
                 </table>
               </div>
             </div> 
