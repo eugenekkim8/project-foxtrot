@@ -90,6 +90,20 @@
         exit();
     }
 
+    if(isset($_POST["diary_id"])){ //if user wants to heart someone's post
+
+        # check for errors
+
+        # insert
+        $alert_text = "Heart sent!";
+        $alert_type = 'alert_success';
+
+        # redirect
+        header("Location: " . $_SERVER['REQUEST_URI'] . "&heart_text=" . $alert_text . "&heart_alert_type=" . $alert_type); 
+        exit();
+
+    }
+
 ?>
 
 
@@ -404,6 +418,10 @@
                         echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST">';
                     } else{
                         echo '<form>';
+                    }
+
+                    if (isset($_GET["heart_text"])){
+                        echo '<div class="alert ' . $_GET["heart_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["heart_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
                     }
 
                 ?>
