@@ -10,6 +10,7 @@
     $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
     $alert_text = "";
+    $alert_type = 0;
 
     // switch subscription status if user has requested
     if (isset($_POST["toggleSubscribe"])){
@@ -22,6 +23,9 @@
         $this_user = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
         $msg_text = ($this_user["is_active"] == 't') ? 'subscribed' : 'unsubscribed';
         $alert_text = 'You have successfully ' . $msg_text . '!';
+
+        header("Location: " . $_SERVER['REQUEST_URI'] . "&alert_text=" . $alert_text); 
+        exit();
     }
 
     // if user has clicked on submit button
@@ -31,10 +35,37 @@
         $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
 
         $alert_text = 'Entry submitted!';
+
+        header("Location: " . $_SERVER['REQUEST_URI'] . "&alert_text=" . $alert_text); 
+        exit();
     }
 
-    if ($_POST){
-        header("Location: " . $_SERVER['REQUEST_URI'] . "&alert_text=" . $alert_text); 
+    // if user wants to share their scores
+
+    if (isset($_POST["shareButton"])){
+        
+        $query = "SELECT id FROM users where password = $1"
+        $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+
+        if (pg_num_rows($results) == 0){
+
+            $alert_text = 'No user with that phone number!';
+            $alert_type = 'alert-danger';
+
+        } else { // otherwise, display submit button and (un)subscribe button
+
+            $recipient = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
+            $recipient_id = $this_user["id"];
+
+            // $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_ts) VALUES ($1, NOW(), $2, $3, $4)";
+            // $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
+
+            $alert_text = 'Score shared with '. $_GET["phoneNum"]. '!';
+            $alert_type = 'alert-success';
+
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI'] . "&share_text=" . $alert_text . "&share_alert_type=" . $alert_type); 
         exit();
     }
 
@@ -247,11 +278,14 @@
 
                                 } else { // otherwise, display submit button 
                                     
-                                    echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary" name="shareButton" value="set">Submit</button> ';
+                                    $this_user = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
+                                    $sender_id = $this_user["id"];
+
+                                    echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"><input type="hidden" name="sender_id" value="' . $sender_id . '"> <button type="submit" class="btn btn-primary" name="shareButton" value="set">Submit</button> ';
 
                                     
                                     if (isset($_GET["share_text"])){
-                                        echo '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">' . $_GET["alert_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                                        echo '<div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
                                     }
 
                                 }
@@ -453,6 +487,6 @@
         })
     })()
     </script>
-    
+
   </body>
 </html>
