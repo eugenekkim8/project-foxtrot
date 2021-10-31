@@ -196,21 +196,18 @@
 
                 ?>
 
-              <li class="nav-item">
-                <button class="nav-link active" id="pills-table-tab" data-bs-toggle="pill" data-bs-target="#pills-table" type="button" role="tab" aria-controls="pills-table" aria-selected="true"><i class="bi-table"></i></button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link" id="pills-graph-tab" data-bs-toggle="pill" data-bs-target="#pills-graph" type="button" role="tab" aria-controls="pills-graph" aria-selected="false"><i class="bi-graph-up"></i></button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link" id="pills-social-tab" data-bs-toggle="pill" data-bs-target="#pills-social, #pills-social-head" type="button" role="tab" aria-controls="pills-social" aria-selected="false"><i class="bi-people-fill"></i></button> 
-              </li>
-
             </ul>
           </div>
         </div>
         <div class="tab-content" id="pills-tabContent">
-          <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">
+            <?php
+                if(isset($_GET["share_text"])){ // if they just attempted to share, activate social tab
+                    echo('<div class="tab-pane fade" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">');
+                } else{ // show default table tab
+                    echo('<div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">');
+                }
+            ?>
+          
             <table class="table" id="entries">
               <thead>
                 <tr>
@@ -261,7 +258,14 @@
               <canvas id="graphCanvas" style="min-height:250px" class="table"></canvas>
             </div>
           </div>
-          <div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">
+          <?php
+                if(isset($_GET["share_text"])){ // if they just attempted to share, activate social tab
+                    echo('<div class="tab-pane fade show active" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">');
+                } else{ // show default table tab
+                    echo('<div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">');
+                }
+          ?>
+          
             <div class="accordion mb-3" id="shareScores">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
