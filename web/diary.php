@@ -44,7 +44,7 @@
 
     if (isset($_POST["shareButton"])){
         
-        $query = "SELECT id FROM users where password = $1"
+        $query = "SELECT id FROM users where password = $1";
         $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
         if (pg_num_rows($results) == 0){
