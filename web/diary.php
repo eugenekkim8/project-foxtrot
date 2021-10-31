@@ -92,8 +92,6 @@
 
     if(isset($_POST["diaryId"])){ //if user wants to heart someone's post
 
-        # check for errors
-
         # insert
         $alert_text = "Heart sent!";
         $alert_type = 'alert-success';
@@ -372,19 +370,17 @@
 
                                     echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"><input type="hidden" name="sender_id" value="' . $sender_id . '"> <button type="submit" class="btn btn-primary" name="shareButton" value="set">Submit</button> ';
 
-                                    
-                                    if (isset($_GET["share_text"])){
-                                        echo '<div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-                                    }
+                                }
 
+                                if (isset($_GET["share_text"])){ // show alert if share was attempted
+                                    echo '</div><div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
                                 }
 
                             } else {
-                                echo '<div class="alert alert-danger" role="alert">No user specified. Please use the link sent in your daily message.</div>';
+                                echo '</div><div class="alert alert-danger" role="alert">No user specified. Please use the link sent in your daily message.</div>';
                             }
 
                         ?>
-                      </div>
                     </form>
                   </div>
                 </div>
