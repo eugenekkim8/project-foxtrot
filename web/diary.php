@@ -205,7 +205,7 @@
 <!-- Dashboard -->
          
         <hr>
-        <div class="row mb-3">
+        <div class="row">
           <div class="col-5"><h2>Dashboard</h2></div>
           <div class="col-7">
             <ul class="nav nav-pills justify-content-end" role="tablist">
@@ -314,7 +314,7 @@
                 }
 
                 if(isset($_GET["share_text"])){ // if they just attempted to share, activate sharing accordion
-                    echo('<div class="accordion mb-3" id="shareScores">
+                    echo('<div class="accordion mt-3 mb-3" id="shareScores">
                                   <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
