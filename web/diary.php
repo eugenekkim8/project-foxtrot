@@ -49,7 +49,7 @@
 
         if (pg_num_rows($results) == 0){ // no user with that phone number
 
-            $alert_text = 'No user with that phone number! <a href="" data-bs-toggle="modal" data-bs-target="#invite">Send an email invitation?</a>';
+            $alert_text = 'No user with that phone number!';
             $alert_type = 'alert-warning';
 
         } else { // otherwise, see if recipient is a user
@@ -377,7 +377,11 @@
                                 echo '</div>';
 
                                 if (isset($_GET["share_text"])){ // show alert if share was attempted
-                                    echo '<div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                                    if($_GET["share_text"] == "No user with that phone number!"){ // yuck. figure out if a hyperlink can be passed through GET
+                                        echo '<div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<a href="" data-bs-toggle="modal" data-bs-target="#invite">Send an email invitation?</a><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                                    } else{
+                                        echo '<div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                                    }
                                 }
 
                             } else {
