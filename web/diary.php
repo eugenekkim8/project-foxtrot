@@ -93,6 +93,8 @@
     if(isset($_POST["diaryId"])){ //if user wants to heart someone's post
 
         # insert
+        $query = "INSERT INTO reactions (sender_id, diary_id) VALUES ($1, $2, NOW())";
+        $results = pg_query_params($conn, $query, array($_POST["sender_id"], $recipient_id)) or die ("Query failed:" . pg_last_error());
         $alert_text = "Heart sent!";
         $alert_type = 'alert-success';
 
@@ -373,13 +375,13 @@
                                 }
 
                                 echo '</div>';
-                                
+
                                 if (isset($_GET["share_text"])){ // show alert if share was attempted
                                     echo '<div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
                                 }
 
                             } else {
-                                echo '</div><div class="alert alert-danger" role="alert">No user specified. Please use the link sent in your daily message.</div>';
+                                echo '<button type="submit" class="btn btn-primary" name="shareButton" value="set" disabled>Submit</button></div>';
                             }
 
                         ?>
