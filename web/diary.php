@@ -429,7 +429,7 @@
 
                 } else { // otherwise, display new badge and notification alerts, then mark notifications as seen 
                 
-                    echo '&nbsp;<span class="badge bg-secondary">New</span>
+                    echo '&nbsp;<span class="badge bg-danger">New</span>
                               </button>
                             </h2>
                             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#shareScores">
