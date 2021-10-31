@@ -439,7 +439,7 @@
 
                         $format_num = '('.substr($this_entry["phone_num"], 0, 3).') '.substr($this_entry["phone_num"], 3, 3).'-'.substr($this_entry["phone_num"],6);
 
-                        echo '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert"><strong>' . $format_num . '</strong> sends a <i class="bi-heart-fill"></i> for your ' . $this_entry["diary_date"] . ' entry (score ' . $this_entry["score"] . ') <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                        // echo '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert"><strong>' . $format_num . '</strong> sends a <i class="bi-heart-fill"></i> for your ' . $this_entry["diary_date"] . ' entry (score ' . $this_entry["score"] . ') <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 
                     }
 
