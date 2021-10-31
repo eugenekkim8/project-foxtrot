@@ -52,7 +52,7 @@
             $alert_text = 'No user with that phone number!';
             $alert_type = 'alert-danger';
 
-        } else { // otherwise, display submit button and (un)subscribe button
+        } else { // otherwise, see if recipient is a user
 
             $recipient = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
             $recipient_id = $this_user["id"];
@@ -60,14 +60,28 @@
             if($recipient_id == $_POST["sender_id"]){
                 $alert_text = 'Can\'t share a score with yourself!!';
                 $alert_type = 'alert-danger';
-            } else{
-                // $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_ts) VALUES ($1, NOW(), $2, $3, $4)";
-                // $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
+            } else { //see if scores are already shared
 
-                $format_num = '('.substr($_POST["phoneNum"], 0, 3).') '.substr($_POST["phoneNum"], 3, 3).'-'.substr($_POST["phoneNum"],6)
+                $query = "SELECT id FROM shares where sender_id = $1 AND recipient_id = $2";
+                $results = pg_query_params($conn, $query, array($_POST["sender_id"], $recipient_id)) or die ("Query failed:" . pg_last_error());
 
-                $alert_text = 'Score shared with '. $format_num . '!';
-                $alert_type = 'alert-success';
+                if (pg_num_rows($results) != 0){
+
+                    $alert_text = 'Scores are already shared!';
+                    $alert_type = 'alert-danger';
+
+                } else{
+
+                    $query = "INSERT INTO shares (sender_id, recipient_id, share_ts) VALUES ($1, $2, NOW())";
+                    $results = pg_query_params($conn, $query, array($_POST["sender_id"], $recipient_id)) or die ("Query failed:" . pg_last_error());
+
+                    $format_num = '('.substr($_POST["phoneNum"], 0, 3).') '.substr($_POST["phoneNum"], 3, 3).'-'.substr($_POST["phoneNum"],6);
+
+                    $alert_text = 'Score shared with '. $format_num . '!';
+                    $alert_type = 'alert-success';
+
+                }
+                
             }
         }
 
