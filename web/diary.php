@@ -239,11 +239,11 @@
                                 $query = "SELECT id FROM users WHERE password = $1";
                                 $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
-                                // if no such user, display error message
+                                // if no such user, disable submit button
 
                                 if (pg_num_rows($results) == 0){
 
-                                    echo '<div class="alert alert-danger" role="alert">No user with the specified key. Please use the link sent in your daily message.</div>';
+                                    echo '<button type="submit" class="btn btn-primary" name="shareButton" value="set" disabled>Submit</button>';
 
                                 } else { // otherwise, display submit button 
                                     
@@ -431,5 +431,28 @@
         }
 
     </script>
+
+    <script>
+      (function () {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+          }, false)
+        })
+    })()
+    </script>
+    
   </body>
 </html>
