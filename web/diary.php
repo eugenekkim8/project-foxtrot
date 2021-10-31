@@ -213,13 +213,54 @@
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#shareScores">
                   <div class="accordion-body">
-                    <form method="POST" class="row g-3 needs-validation" action="" novalidate>
+                    
+                    <?php
+
+                        if (isset($_GET["p"])){
+                            echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST" class="row g-3 needs-validation" novalidate>';
+                        } else{
+                            echo '<form class="row g-3 needs-validation" novalidate>';
+                        }
+
+                    ?>
+
                       <div class="col-md-6">
                         <input type="tel" placeholder="Recipient's phone number" class="form-control" name="phoneNum" id="phoneNum" pattern="^\d{10}$" required>
                         <div class="invalid-feedback">Please provide a valid 10-digit phone number (e.g., 1234567890).</div>
                       </div>
                       <div class="col-md-6">
-                        <input type="submit" class="btn btn-primary" value="Submit">
+
+                        <?php
+
+                            if (isset($_GET["p"])){
+
+                                // see if there is a user with password = p, and if so, get user id
+
+                                $query = "SELECT id FROM users WHERE password = $1";
+                                $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+
+                                // if no such user, display error message
+
+                                if (pg_num_rows($results) == 0){
+
+                                    echo '<div class="alert alert-danger" role="alert">No user with the specified key. Please use the link sent in your daily message.</div>';
+
+                                } else { // otherwise, display submit button 
+                                    
+                                    echo '<input type="hidden" name="p" value="' . $_GET["p"] . '"> <button type="submit" class="btn btn-primary" name="shareButton" value="set">Submit</button> ';
+
+                                    
+                                    if (isset($_GET["share_text"])){
+                                        echo '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert">' . $_GET["alert_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                                    }
+
+                                }
+
+                            } else {
+                                echo '<div class="alert alert-danger" role="alert">No user specified. Please use the link sent in your daily message.</div>';
+                            }
+
+                        ?>
                       </div>
                     </form>
                     <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
