@@ -463,10 +463,11 @@
 
                         $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                        $query = "SELECT d.id AS id, u.phone_num, to_char(d.local_ts, 'DD Mon YYYY') AS diary_date, d.score FROM diaries d 
+                        $query = "SELECT d.id AS id, u.phone_num, to_char(d.local_ts, 'DD Mon YYYY') AS diary_date, d.score, r.id AS reaction FROM diaries d 
                                     LEFT JOIN users u ON u.password = d.password 
                                     LEFT JOIN shares s ON u.id = s.sender_id 
                                     LEFT JOIN users u2 ON u2.id = s.recipient_id
+                                    LEFT JOIN reactions r ON r.diary_id = d.id AND r.sender_id = s.recipient_id
                                     WHERE u2.password = $1
                                     ORDER BY d.local_ts DESC
                                     LIMIT 10";
@@ -492,7 +493,14 @@
                             echo '<th scope="row">' . $this_entry["diary_date"] . '</th>';
                             echo '<td>' . $format_num . '</td>';
                             echo '<td class="' . $color . '">' . $this_entry["score"] . '</td>';
-                            echo '<td><button type="submit" name="diaryId" value=' . $this_entry["id"] .' class="btn btn-primary"><i class="bi-heart-fill"></i></button></td>';
+
+                            if($this_entry["reaction"] == NULL){
+                                echo '<td><button type="submit" name="diaryId" value=' . $this_entry["id"] .' class="btn btn-primary"><i class="bi-heart-fill"></i></button></td>';
+                            } else{
+                                echo '<td><button type="submit" class="btn btn-primary" disabled><i class="bi-heart-fill"></i></button></td>';
+                            }
+
+                            
                             echo '</tr>';
 
                         }
