@@ -118,6 +118,8 @@
   <body class="py-4">
     <div class="container">
 
+<!-- Score and comment entry -->
+
         <h1 id="today_date"></h1>
 
         <?php
@@ -185,6 +187,8 @@
         echo ('</form>');
 
         ?>
+
+<!-- Dashboard -->
          
         <hr>
         <div class="row mb-3">
@@ -220,6 +224,9 @@
             </ul>
           </div>
         </div>
+
+<!-- Table -->
+
         <div class="tab-content" id="pills-tabContent">
             <?php
                 if(isset($_GET["share_text"])){ // if they just attempted to share, activate social tab
@@ -274,11 +281,17 @@
 
             </table>
           </div>
+
+<!-- Graph -->
+
           <div class="tab-pane fade" id="pills-graph" role="tabpanel" aria-labelledby="pills-graph-tab">
             <div id="chart-container table-responsive">
               <canvas id="graphCanvas" style="min-height:250px" class="table"></canvas>
             </div>
           </div>
+
+<!-- Social -->
+
           <?php
                 if(isset($_GET["share_text"])){ // if they just attempted to share, activate social tab
                     echo('<div class="tab-pane fade show active" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">
@@ -385,6 +398,16 @@
             </div>
             <div class="row">              
               <div class="col-md">
+                <?php
+
+                    if (isset($_GET["p"])){
+                        echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST">';
+                    } else{
+                        echo '<form>';
+                    }
+
+                ?>
+
                 <table class="table" id="community">
                   <thead>
                     <tr>
@@ -403,7 +426,7 @@
 
                         $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                        $query = "SELECT d.id, u.phone_num, to_char(d.local_ts, 'DD Mon YYYY') AS diary_date, d.score FROM diaries d 
+                        $query = "SELECT d.id AS id, u.phone_num, to_char(d.local_ts, 'DD Mon YYYY') AS diary_date, d.score FROM diaries d 
                                     LEFT JOIN users u ON u.password = d.password 
                                     LEFT JOIN shares s ON u.id = s.sender_id 
                                     LEFT JOIN users u2 ON u2.id = s.recipient_id
@@ -432,7 +455,7 @@
                             echo '<th scope="row">' . $this_entry["diary_date"] . '</th>';
                             echo '<td>' . $format_num . '</td>';
                             echo '<td class="' . $color . '">' . $this_entry["score"] . '</td>';
-                            echo '<td><button class="btn btn-primary"><i class="bi-heart-fill"></i></button></td>';
+                            echo '<td><button type="submit" name="diaryId" value=' . $this_entry["id"] .' class="btn btn-primary"><i class="bi-heart-fill"></i></button></td>';
                             echo '</tr>';
 
                         }
@@ -440,6 +463,7 @@
                 ?>                
 
                 </table>
+                </form>
               </div>
             </div> 
           </div>  
