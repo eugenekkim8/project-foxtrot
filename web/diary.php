@@ -57,12 +57,18 @@
             $recipient = pg_fetch_array($results); // only one user should be returned because password must be UNIQUE
             $recipient_id = $this_user["id"];
 
-            // $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_ts) VALUES ($1, NOW(), $2, $3, $4)";
-            // $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
+            if($recipient_id == $_POST["sender_id"]){
+                $alert_text = 'Can\'t share a score with yourself!!';
+                $alert_type = 'alert-danger';
+            } else{
+                // $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_ts) VALUES ($1, NOW(), $2, $3, $4)";
+                // $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
 
-            $alert_text = 'Score shared with '. $_POST["phoneNum"]. '!';
-            $alert_type = 'alert-success';
+                $format_num = '('.substr($_POST["phoneNum"], 0, 3).') '.substr($_POST["phoneNum"], 3, 3).'-'.substr($_POST["phoneNum"],6)
 
+                $alert_text = 'Score shared with '. $format_num . '!';
+                $alert_type = 'alert-success';
+            }
         }
 
         header("Location: " . $_SERVER['REQUEST_URI'] . "&share_text=" . $alert_text . "&share_alert_type=" . $alert_type); 
@@ -265,7 +271,7 @@
                     echo('<div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">');
                 }
           ?>
-          
+
             <div class="accordion mb-3" id="shareScores">
               <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
@@ -328,10 +334,6 @@
                         ?>
                       </div>
                     </form>
-                    <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
-                      No user with that phone number! <a href="" data-bs-toggle="modal" data-bs-target="#invite">Send an email invitation?</a>
-                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
                   </div>
                 </div>
               </div>
