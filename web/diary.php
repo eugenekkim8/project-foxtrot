@@ -385,7 +385,7 @@
 
                         $conn = pg_connect($connect_str) or die("Could not connect" . pg_last_error());
 
-                        $query = "SELECT d.id, u.phone_num, d.local_ts, d.score FROM diaries d 
+                        $query = "SELECT d.id, u.phone_num, to_char(d.local_ts, 'DD Mon YYYY') AS diary_date, d.score FROM diaries d 
                                     LEFT JOIN users u ON u.password = d.password 
                                     LEFT JOIN shares s ON u.id = s.sender_id 
                                     LEFT JOIN users u2 ON u2.id = s.recipient_id
