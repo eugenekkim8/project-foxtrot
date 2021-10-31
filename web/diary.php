@@ -90,7 +90,7 @@
         exit();
     }
 
-    if(isset($_POST["diary_id"])){ //if user wants to heart someone's post
+    if(isset($_POST["diaryId"])){ //if user wants to heart someone's post
 
         # check for errors
 
