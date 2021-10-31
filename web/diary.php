@@ -439,15 +439,15 @@
 
                         $format_num = '('.substr($this_entry["phone_num"], 0, 3).') '.substr($this_entry["phone_num"], 3, 3).'-'.substr($this_entry["phone_num"],6);
 
-                        // echo '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert"><strong>' . $format_num . '</strong> sends a <i class="bi-heart-fill"></i> for your ' . $this_entry["diary_date"] . ' entry (score ' . $this_entry["score"] . ') <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                        echo '<div class="alert alert-success alert-dismissible fade show mt-3" role="alert"><strong>' . $format_num . '</strong> sends a <i class="bi-heart-fill"></i> for your ' . $this_entry["diary_date"] . ' entry (score ' . $this_entry["score"] . ') <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
 
                     }
 
-                    $query = "UPDATE reactions 
-                                LEFT JOIN diaries d on d.id = r.diary_id
-                                LEFT JOIN users u on u.password = d.password
-                                SET seen = 'T' 
-                                WHERE u.password = $1";
+                    $query = "UPDATE reactions r SET seen = 'T' 
+                                FROM diaries d, users u
+                                WHERE d.id = r.diary_id AND
+                                u.password = d.password AND
+                                u.password = $1";
 
                     $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
 
