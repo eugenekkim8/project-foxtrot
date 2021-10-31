@@ -243,7 +243,7 @@
 
         <div class="tab-content" id="pills-tabContent">
             <?php
-                if(isset($_GET["share_text"]) or isset($_GET["share_text"])){ // if they just attempted to share or heart, activate social tab
+                if(isset($_GET["share_text"]) or isset($_GET["heart_text"])){ // if they just attempted to share or heart, activate social tab
                     echo('<div class="tab-pane fade" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">');
                 } else{ // show default table tab
                     echo('<div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">');
@@ -313,7 +313,7 @@
                     echo('<div class="tab-pane fade" id="pills-social" role="tabpanel" aria-labelledby="pills-social-tab">');
                 }
 
-                if(isset($_GET["share_text"]) or isset($_GET["heart_text"])){ // if they just attempted to share, activate sharing accordion
+                if(isset($_GET["share_text"])){ // if they just attempted to share, activate sharing accordion
                     echo('<div class="accordion mb-3" id="shareScores">
                                   <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
