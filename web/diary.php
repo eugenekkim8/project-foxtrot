@@ -50,7 +50,7 @@
         if (pg_num_rows($results) == 0){ // no user with that phone number
 
             $alert_text = 'No user with that phone number! <a href="" data-bs-toggle="modal" data-bs-target="#invite">Send an email invitation?</a>';
-            $alert_type = 'alert-danger';
+            $alert_type = 'alert-warning';
 
         } else { // otherwise, see if recipient is a user
 
