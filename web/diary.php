@@ -303,27 +303,14 @@
                                 <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#shareScores">
                                   <div class="accordion-body">');
                 }
-          ?>
 
-            <div class="accordion mb-3" id="shareScores">
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Share my scores
-                  </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#shareScores">
-                  <div class="accordion-body">
-                    
-                    <?php
+                if (isset($_GET["p"])){
+                    echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST" class="row g-3 needs-validation" novalidate>';
+                } else{
+                    echo '<form class="row g-3 needs-validation" novalidate>';
+                }
 
-                        if (isset($_GET["p"])){
-                            echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST" class="row g-3 needs-validation" novalidate>';
-                        } else{
-                            echo '<form class="row g-3 needs-validation" novalidate>';
-                        }
-
-                    ?>
+            ?>
 
                       <div class="col-md-6">
                         <input type="tel" placeholder="Recipient's phone number" class="form-control" name="phoneNum" id="phoneNum" pattern="^\d{10}$" aria-describedby="phoneHelp" required>
