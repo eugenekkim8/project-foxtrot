@@ -44,8 +44,8 @@
 
     if (isset($_POST["shareButton"])){
         
-        $query = "SELECT id FROM users where password = $1";
-        $results = pg_query_params($conn, $query, array($_GET["p"])) or die ("Query failed:" . pg_last_error());
+        $query = "SELECT id FROM users where phone_num = $1";
+        $results = pg_query_params($conn, $query, array($_POST["phoneNum"])) or die ("Query failed:" . pg_last_error());
 
         if (pg_num_rows($results) == 0){
 
@@ -60,7 +60,7 @@
             // $query = "INSERT INTO diaries (password, diary_ts, score, comment, local_ts) VALUES ($1, NOW(), $2, $3, $4)";
             // $results = pg_query_params($conn, $query, array($_GET["p"], $_POST["score"], $_POST["comment"], $_POST["local_date"])) or die ("Query failed:" . pg_last_error());
 
-            $alert_text = 'Score shared with '. $_GET["phoneNum"]. '!';
+            $alert_text = 'Score shared with '. $_POST["phoneNum"]. '!';
             $alert_type = 'alert-success';
 
         }
@@ -170,6 +170,32 @@
           <div class="col-5"><h2>Dashboard</h2></div>
           <div class="col-7">
             <ul class="nav nav-pills justify-content-end" role="tablist">
+                <?php
+                    if(isset($_GET["share_text"])){ // if they just attempted to share, activate social tab
+                        echo('<li class="nav-item">
+                                <button class="nav-link" id="pills-table-tab" data-bs-toggle="pill" data-bs-target="#pills-table" type="button" role="tab" aria-controls="pills-table" aria-selected="false"><i class="bi-table"></i></button>
+                              </li>
+                              <li class="nav-item">
+                                <button class="nav-link" id="pills-graph-tab" data-bs-toggle="pill" data-bs-target="#pills-graph" type="button" role="tab" aria-controls="pills-graph" aria-selected="false"><i class="bi-graph-up"></i></button>
+                              </li>
+                              <li class="nav-item">
+                                <button class="nav-link active" id="pills-social-tab" data-bs-toggle="pill" data-bs-target="#pills-social, #pills-social-head" type="button" role="tab" aria-controls="pills-social" aria-selected="true"><i class="bi-people-fill"></i></button> 
+                              </li>');
+                    } else{ // show default table tab
+                        echo('<li class="nav-item">
+                                <button class="nav-link active" id="pills-table-tab" data-bs-toggle="pill" data-bs-target="#pills-table" type="button" role="tab" aria-controls="pills-table" aria-selected="true"><i class="bi-table"></i></button>
+                              </li>
+                              <li class="nav-item">
+                                <button class="nav-link" id="pills-graph-tab" data-bs-toggle="pill" data-bs-target="#pills-graph" type="button" role="tab" aria-controls="pills-graph" aria-selected="false"><i class="bi-graph-up"></i></button>
+                              </li>
+                              <li class="nav-item">
+                                <button class="nav-link" id="pills-social-tab" data-bs-toggle="pill" data-bs-target="#pills-social, #pills-social-head" type="button" role="tab" aria-controls="pills-social" aria-selected="false"><i class="bi-people-fill"></i></button> 
+                              </li>');
+
+                    }
+
+                ?>
+
               <li class="nav-item">
                 <button class="nav-link active" id="pills-table-tab" data-bs-toggle="pill" data-bs-target="#pills-table" type="button" role="tab" aria-controls="pills-table" aria-selected="true"><i class="bi-table"></i></button>
               </li>
@@ -179,6 +205,7 @@
               <li class="nav-item">
                 <button class="nav-link" id="pills-social-tab" data-bs-toggle="pill" data-bs-target="#pills-social, #pills-social-head" type="button" role="tab" aria-controls="pills-social" aria-selected="false"><i class="bi-people-fill"></i></button> 
               </li>
+
             </ul>
           </div>
         </div>
