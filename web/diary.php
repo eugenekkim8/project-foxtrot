@@ -93,7 +93,7 @@
     if(isset($_POST["diaryId"])){ //if user wants to heart someone's post
 
         # insert
-        $query = "INSERT INTO reactions (sender_id, diary_id, seen, reaction_ts VALUES ($1, $2, 'F', NOW())";
+        $query = "INSERT INTO reactions (sender_id, diary_id, seen, reaction_ts) VALUES ($1, $2, 'F', NOW())";
         $results = pg_query_params($conn, $query, array($_POST["sender_id"], $_POST["diary_id"])) or die ("Query failed:" . pg_last_error());
         $alert_text = "Heart sent!";
         $alert_type = 'alert-success';
