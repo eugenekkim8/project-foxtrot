@@ -308,7 +308,8 @@
                     ?>
 
                       <div class="col-md-6">
-                        <input type="tel" placeholder="Recipient's phone number" class="form-control" name="phoneNum" id="phoneNum" pattern="^\d{10}$" required>
+                        <input type="tel" placeholder="Recipient's phone number" class="form-control" name="phoneNum" id="phoneNum" pattern="^\d{10}$" aria-describedby="phoneHelp" required>
+                        <div id="phoneHelp" class="form-text">They'll receive your daily scores, but not your comments.</div>
                         <div class="invalid-feedback">Please provide a valid 10-digit phone number (e.g., 1234567890).</div>
                       </div>
                       <div class="col-md-6">
@@ -359,6 +360,18 @@
                   </button>
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#shareScores">
+                  <div class="accordion-body">
+                    Coming soon!
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Notifications &nbsp;<span class="badge bg-secondary">New</span>
+                  </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#shareScores">
                   <div class="accordion-body">
                     Coming soon!
                   </div>
