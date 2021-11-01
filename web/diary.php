@@ -118,7 +118,7 @@
         $mail = new PHPMailer(true);
 
         //Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+        $mail->SMTPDebug = 0;                      //No verbose debug output
         $mail->isSMTP();                                            //Send using SMTP
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
@@ -135,7 +135,7 @@
 
         $mail->clearAllRecipients();
         $mail->addAddress($_POST["address"]);
-        $mail->Body    = '<p>' . $_POST["name"] . ' has invited you to join Project Foxtrot, a web-based mental health tracking tool. Foxtrot helps you track your mood over time through periodic check-ins, and allows you to share selected information with trusted friends and family. </p><p> Learn more <a href="https://project-foxtrot.herokuapp.com/about.html">here</a>, or create an account <a href="https://project-foxtrot.herokuapp.com/">here</a> if you\'re convinced!</p>';
+        $mail->Body    = '<p>' . $_POST["name"] . ' has invited you to join Project Foxtrot, a web-based mental health tracking tool.</p><p>Foxtrot helps you track your mood over time through periodic check-ins, and allows you to share selected information with trusted friends and family. </p><p> Learn more <a href="https://project-foxtrot.herokuapp.com/about.html">here</a>, and create an account <a href="https://project-foxtrot.herokuapp.com/">here</a> once you\'re convinced!</p>';
         $mail->AltBody = $_POST["name"] . ' has invited you to join Project Foxtrot, a web-based mental health tracking tool. Foxtrot helps you track your mood over time through periodic check-ins, and allows you to share selected information with trusted friends and family. Learn more at https://project-foxtrot.herokuapp.com.';
          
 
