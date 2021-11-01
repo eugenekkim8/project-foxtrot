@@ -30,7 +30,6 @@ test?
 
     //Content
     $mail->isHTML(true);
-    $mail->Subject = 'Your daily check-in';
 
     //Connect to DB
     $dbopts = parse_url(getenv('DATABASE_URL'));
@@ -45,6 +44,12 @@ test?
 
 	//Is there a special message today?
 	$msg = getenv('MSG');
+
+	if($msg == ""){
+		$mail->Subject = 'Your daily check-in';
+	} else {
+		$mail->Subject = 'Special announcement';
+	}
 
 	while ($this_user = pg_fetch_array($results)){
 		$mail->clearAllRecipients();
