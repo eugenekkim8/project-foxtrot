@@ -2,6 +2,12 @@
     // post-redirect-get mechanism to avoid double entries
     // form can be submitted only if p is valid, so no need to redo verification
 
+    require '../vendor/autoload.php';
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
     // establish connection
     $dbopts = parse_url(getenv('DATABASE_URL'));
 
@@ -100,6 +106,20 @@
 
         # redirect
         header("Location: " . $_SERVER['REQUEST_URI'] . "&heart_text=" . $alert_text . "&heart_alert_type=" . $alert_type); 
+        exit();
+
+    }
+
+    if(isset($_POST["email"])){ // if user is inviting someone
+
+        # connect to server
+
+        # send email
+
+        # redirect
+        $alert_text = 'Invitation sent to ' . $_POST["address"]. '!';
+
+        header("Location: " . $_SERVER['REQUEST_URI'] . "&alert_text=" . $alert_text); 
         exit();
 
     }
@@ -378,7 +398,7 @@
 
                                 if (isset($_GET["share_text"])){ // show alert if share was attempted
                                     if($_GET["share_text"] == "No user with that phone number!"){ // yuck. figure out if a hyperlink can be passed through GET
-                                        echo '<div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<a href="" data-bs-toggle="modal" data-bs-target="#invite">Send an email invitation?</a><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                                        echo '<div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . ' <a href="" data-bs-toggle="modal" data-bs-target="#invite">Send an email invitation?</a><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
                                     } else{
                                         echo '<div class="alert ' . $_GET["share_alert_type"] . ' alert-dismissible fade show mt-3" role="alert">' . $_GET["share_text"] . '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
                                     }
@@ -591,8 +611,8 @@
                         echo '<form class="mt-3 needs-validation" novalidate>';
                     }
                 ?>  
-                  <div class="row mb-3"> <div class="col-md-4"> Email address:</div><div class="col-md-8"><input type="email" class="form-control" placeholder="name@example.com" required> <div class="invalid-feedback">Please provide a valid email address.</div> </div></div>
-                  <div class="row"> <div class="col-md-4"> Your name:</div><div class="col-md-8"><input type="text" class="form-control" describedby="nameHelp" required><div id="nameHelp" class="form-text">We won't save this.</div> </div></div>
+                  <div class="row mb-3"> <div class="col-md-4"> Email address:</div><div class="col-md-8"><input type="email" class="form-control" placeholder="name@example.com" name="address" required> <div class="invalid-feedback">Please provide a valid email address.</div> </div></div>
+                  <div class="row"> <div class="col-md-4"> Your name:</div><div class="col-md-8"><input type="text" class="form-control" describedby="nameHelp" name="name" required><div id="nameHelp" class="form-text">We won't save this.</div> </div></div>
               </div>
               <div class="modal-footer">
                 <button type="submit" name="email" class="btn btn-primary">Send</button></form>
@@ -600,31 +620,6 @@
             </div>
           </div>
         </div>
-
-    <div class="modal fade" id="invite" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Send an email invite!</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <?php
-                if (isset($_GET["p"])){ 
-                    echo '<form action="diary.php?p=' . $_GET["p"] . '" method="POST" class="needs-validation" novalidate>';
-                } else{
-                    echo '<form class="needs-validation" novalidate>';
-                }
-            ?>
-              Email address: <input type="text">
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Send</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
