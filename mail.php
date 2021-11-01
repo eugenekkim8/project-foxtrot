@@ -59,8 +59,8 @@ test?
 			$mail->Body    = 'Jot down how you\'re feeling today <a href = "https://project-foxtrot.herokuapp.com/diary.php?p=' . $password . '">here</a>.';
     		$mail->AltBody = 'Jot down how you\'re feeling today: https://project-foxtrot.herokuapp.com/diary.php?p=' . $password;
 		} else {
-			$mail->Body    = $msg . '<br><br>Jot down how you\'re feeling today <a href = "https://project-foxtrot.herokuapp.com/diary.php?p=' . $password . '">here</a>.';
-    		$mail->AltBody = $msg . ' Jot down how you\'re feeling today: https://project-foxtrot.herokuapp.com/diary.php?p=' . $password;
+			$mail->Body    = $msg;
+    		$mail->AltBody = $msg;
 		}
 		
 
