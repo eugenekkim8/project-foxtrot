@@ -114,7 +114,37 @@
 
         # connect to server
 
-        # send email
+        //Create an instance; passing `true` enables exceptions
+        $mail = new PHPMailer(true);
+
+        //Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = getenv('GMAIL_ADDR');                     //SMTP username
+        $mail->Password   = getenv('GMAIL_PASS');                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+        $mail->setFrom('smtp.foxtrot@gmail.com', 'Project Foxtrot');
+
+        //Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Invitation to join Project Foxtrot';
+
+        $mail->clearAllRecipients();
+        $mail->addAddress($_POST["address"]);
+        $mail->Body    = '<p>' . $_POST["name"] . ' has invited you to join Project Foxtrot, a web-based mental health tracking tool. Foxtrot helps you track your mood over time through periodic check-ins, and allows you to share selected information with trusted friends and family. </p><p> Learn more <a href="https://project-foxtrot.herokuapp.com/about.html">here</a>, or create an account <a href="https://project-foxtrot.herokuapp.com/">here</a> if you\'re convinced!</p>';
+        $mail->AltBody = $_POST["name"] . ' has invited you to join Project Foxtrot, a web-based mental health tracking tool. Foxtrot helps you track your mood over time through periodic check-ins, and allows you to share selected information with trusted friends and family. Learn more at https://project-foxtrot.herokuapp.com.';
+         
+
+        try {
+            $mail->send();
+            echo 'Message has been sent';
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
 
         # redirect
         $alert_text = 'Invitation sent to ' . $_POST["address"]. '!';
