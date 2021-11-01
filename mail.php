@@ -48,7 +48,7 @@ test?
 	if($msg == ""){
 		$mail->Subject = 'Your daily check-in';
 	} else {
-		$mail->Subject = 'Special announcement';
+		$mail->Subject = 'Announcement';
 	}
 
 	while ($this_user = pg_fetch_array($results)){
