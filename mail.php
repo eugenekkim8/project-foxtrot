@@ -30,7 +30,6 @@ test?
 
     //Content
     $mail->isHTML(true);
-    $mail->Subject = 'Your daily check-in';
 
     //Connect to DB
     $dbopts = parse_url(getenv('DATABASE_URL'));
@@ -43,6 +42,15 @@ test?
 	$query = "SELECT phone_num, carrier, password FROM users WHERE is_active AND text_consent AND verified_num";
 	$results = pg_query($query) or die ("Query failed:" . pg_last_error());
 
+	//Is there a special message today?
+	$msg = getenv('MSG');
+
+	if($msg == ""){
+		$mail->Subject = 'Your daily check-in';
+	} else {
+		$mail->Subject = 'Announcement';
+	}
+
 	while ($this_user = pg_fetch_array($results)){
 		$mail->clearAllRecipients();
 
@@ -52,8 +60,14 @@ test?
 		$password = $this_user['password'];
 
 		$mail->addAddress($address);
-		$mail->Body    = 'Jot down how you\'re feeling today <a href = "https://project-foxtrot.herokuapp.com/diary.php?p=' . $password . '">here</a>.';
-    	$mail->AltBody = 'Jot down how you\'re feeling today: https://project-foxtrot.herokuapp.com/diary.php?p=' . $password;
+		if($msg == ""){
+			$mail->Body    = 'Jot down how you\'re feeling today <a href = "https://project-foxtrot.herokuapp.com/diary.php?p=' . $password . '">here</a>.';
+    		$mail->AltBody = 'Jot down how you\'re feeling today: https://project-foxtrot.herokuapp.com/diary.php?p=' . $password;
+		} else {
+			$mail->Body    = $msg;
+    		$mail->AltBody = $msg;
+		}
+		
 
 		try {
 		    $mail->send();
